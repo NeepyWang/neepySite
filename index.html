@@ -92,23 +92,7 @@
   </div>
 
   <div class="foot">
-    三个交互页与素材都在本站内，点选即可打开，不依赖其他网址。<br>
-    分享时请整条复制地址（含 ?sharecode= 后面的参数）。
+    三个交互页与素材都在本站内，点选即可打开，不依赖其他网址。
   </div>
-
-<script>
-/* 平台访问参数随站内导航透传，保证每个子页与子资源都能正常打开 */
-(function(){
-  var code = new URLSearchParams(location.search).get('sharecode');
-  if(!code) return;
-  var cards = document.querySelectorAll('a.card');
-  for(var i=0;i<cards.length;i++){
-    var a = cards[i];
-    var u = new URL(a.getAttribute('href'), location.href);
-    u.searchParams.set('sharecode', code);
-    a.setAttribute('href', u.pathname + u.search + u.hash);
-  }
-})();
-</script>
 </body>
 </html>
