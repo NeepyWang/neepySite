@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>听见华夏——中国古代民族乐器AI综合体验馆 · 点击卡片，聆听中国古代雅乐之声</title>
+<style>
+:root{
+  --bg:#03060c;
+  --line:rgba(96,152,196,.16);
+  --cyan:#4fd2ff;
+  --cyan-soft:#9be7ff;
+  --ink:#f4f9ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  background:radial-gradient(ellipse 100% 60% at 50% -12%,#101f33 0%,#070e1a 42%,#03060c 100%);
+  color:var(--ink);
+  font-family:"Songti SC","STSong","Noto Serif SC","SimSun","Source Han Serif SC",serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+.star{position:absolute;width:1.5px;height:1.5px;border-radius:50%;background:#d9efff;animation:twinkle 5s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.12;transform:scale(.7)}50%{opacity:.75;transform:scale(1.2)}}
+
+.wrap{position:relative;z-index:1;max-width:1680px;margin:0 auto;padding:0 28px 26px}
+.hero{text-align:center;padding:24px 0 18px}
+.hero h1{
+  margin:0 0 12px;
+  font-size:clamp(27px,3.3vw,44px);
+  font-weight:600;
+  letter-spacing:.2em;
+  text-indent:.2em;
+  text-shadow:0 0 26px rgba(120,205,255,.4),0 2px 12px rgba(0,0,0,.8);
+}
+.hero p{
+  margin:0;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:13px;
+  letter-spacing:.16em;
+  color:#5fc9f7;
+  text-shadow:0 0 14px rgba(60,180,255,.5);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--line);
+  border-left:1px solid var(--line);
+}
+.card{
+  position:relative;
+  display:block;
+  width:100%;
+  height:clamp(215px,19.5vw,310px);
+  padding:0;
+  border:0;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:radial-gradient(ellipse 62% 46% at 50% 44%,rgba(21,49,78,.32),rgba(3,8,15,0) 72%);
+  color:inherit;
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+  overflow:hidden;
+  appearance:none;
+  transition:background .35s ease,box-shadow .35s ease;
+}
+.card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 60%,rgba(2,8,16,.55) 100%);
+}
+.card:hover,.card:focus-visible{
+  outline:none;
+  background:radial-gradient(ellipse 68% 52% at 50% 44%,rgba(28,78,124,.42),rgba(3,10,20,.35) 75%);
+  box-shadow:inset 0 0 0 1px rgba(79,210,255,.4),inset 0 0 70px rgba(24,120,200,.22);
+}
+.card.playing{
+  background:radial-gradient(ellipse 72% 56% at 50% 44%,rgba(30,96,150,.5),rgba(4,12,24,.5) 76%);
+  box-shadow:inset 0 0 0 1px rgba(96,222,255,.72),inset 0 0 90px rgba(30,150,230,.3);
+  animation:breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{box-shadow:inset 0 0 0 1px rgba(96,222,255,.6),inset 0 0 70px rgba(30,150,230,.24)}50%{box-shadow:inset 0 0 0 1px rgba(140,238,255,.9),inset 0 0 110px rgba(40,175,255,.42)}}
+.card:active{transform:scale(.99)}
+
+.art{
+  position:absolute;left:0;right:0;top:0;height:84%;
+  display:flex;align-items:center;justify-content:center;pointer-events:none;
+}
+.art::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 64% 66% at 50% 50%,transparent 52%,rgba(3,8,15,.72) 100%);
+}
+.art img,.art svg.fallback{
+  width:100%;height:100%;overflow:visible;object-fit:contain;
+  filter:drop-shadow(0 0 14px rgba(46,164,255,.38));
+  transition:transform .45s cubic-bezier(.2,.8,.3,1),filter .45s ease;
+}
+.art svg.fallback{display:none}
+.art.no-photo svg.fallback{display:block}
+.card:hover .art img,.card:hover .art svg.fallback{transform:translateY(-5px) scale(1.035);filter:drop-shadow(0 0 22px rgba(76,200,255,.55))}
+.card.playing .art img,.card.playing .art svg.fallback{animation:float 2.8s ease-in-out infinite;filter:drop-shadow(0 0 26px rgba(96,216,255,.7))}
+@keyframes float{0%,100%{transform:translateY(-3px) scale(1.025)}50%{transform:translateY(3px) scale(1.04)}}
+@media(min-width:1500px) and (min-aspect-ratio:16/10){
+  .card{height:clamp(210px,15.5vw,268px)}
+  .hero{padding:20px 0 16px}
+}
+
+.podium{
+  position:absolute;left:50%;top:69%;width:60%;height:28px;transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(64,174,255,.3),transparent 70%);
+  filter:blur(7px);pointer-events:none;
+}
+.card.playing .podium{animation:podium 2.4s ease-in-out infinite}
+@keyframes podium{0%,100%{opacity:.65;transform:translateX(-50%) scaleX(.92)}50%{opacity:1;transform:translateX(-50%) scaleX(1.1)}}
+
+.drop{
+  position:absolute;right:19%;top:53%;width:16px;height:20px;pointer-events:none;
+  opacity:.85;transition:opacity .3s,transform .3s;
+}
+.drop svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 6px rgba(120,220,255,.7))}
+.card:hover .drop{opacity:1;transform:translateY(-2px)}
+.card.playing .drop{animation:dropBounce .7s ease-in-out infinite alternate}
+@keyframes dropBounce{from{transform:translateY(0) scale(1)}to{transform:translateY(-5px) scale(1.12)}}
+
+.meta{position:absolute;left:20px;bottom:19px;z-index:2;pointer-events:none}
+.tag{
+  display:block;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11.5px;letter-spacing:.14em;color:#4ec9f8;
+  text-shadow:0 0 12px rgba(50,180,255,.55);
+}
+.name{
+  display:block;margin-top:5px;font-size:clamp(20px,2.1vw,27px);
+  letter-spacing:.12em;line-height:1.15;
+  text-shadow:0 0 18px rgba(180,225,255,.3),0 2px 8px rgba(0,0,0,.9);
+}
+.badge{
+  position:absolute;right:16px;top:16px;z-index:3;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:10px;letter-spacing:.14em;color:#8ee6ff;
+  padding:4px 9px;border:1px solid rgba(105,220,255,.45);border-radius:20px;
+  background:rgba(14,48,74,.5);opacity:0;transform:translateY(-5px);
+  transition:opacity .3s,transform .3s;pointer-events:none;
+}
+.card.playing .badge{opacity:1;transform:translateY(0)}
+.wave{display:inline-flex;align-items:center;gap:2px;height:9px;margin-left:5px;vertical-align:middle}
+.wave i{display:block;width:2px;height:3px;background:#9ceaff;border-radius:2px;animation:wave .8s ease-in-out infinite}
+.wave i:nth-child(2){animation-delay:.15s}.wave i:nth-child(3){animation-delay:.3s}
+@keyframes wave{0%,100%{height:3px}50%{height:9px}}
+
+.bottom{
+  display:flex;align-items:center;justify-content:space-between;gap:22px;
+  margin-top:20px;flex-wrap:wrap;
+}
+.info{min-width:0;flex:1 1 340px}
+.info-title{font-size:17px;letter-spacing:.12em;color:#eaf7ff;margin-bottom:5px}
+.info-desc{
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:12.5px;line-height:1.7;color:#8fa9c0;letter-spacing:.02em;
+}
+.info-src{
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11px;color:#4a7a99;margin-top:5px;letter-spacing:.06em;
+}
+.dock{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:10px 16px;border:1px solid rgba(90,160,210,.22);border-radius:999px;
+  background:rgba(8,20,34,.7);backdrop-filter:blur(8px);
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+}
+.btn{
+  border:1px solid rgba(90,190,240,.35);background:rgba(20,60,90,.35);
+  color:#bfeaff;font-family:inherit;font-size:12px;letter-spacing:.08em;
+  padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  transition:background .25s,border-color .25s,box-shadow .25s;
+}
+.btn:hover{background:rgba(30,110,160,.5);border-color:rgba(120,225,255,.7);box-shadow:0 0 14px rgba(50,170,240,.3)}
+.btn.primary{background:rgba(26,96,140,.5);border-color:rgba(110,215,255,.55);color:#e4f8ff}
+.vol{display:flex;align-items:center;gap:7px;color:#7fa9c4;font-size:11px;letter-spacing:.06em}
+.vol input{width:82px;accent-color:#45c8ff;cursor:pointer}
+.footnote{
+  margin:20px 0 0;text-align:center;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11px;letter-spacing:.1em;color:#45647c;
+}
+.hint{color:#5c88a4}
+
+/* ---------- 听辨音色小游戏 ---------- */
+body.quiz-open{overflow:hidden}
+.quiz{
+  position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+  padding:22px;
+  background:radial-gradient(ellipse 86% 62% at 50% 0%,rgba(13,34,57,.94),rgba(2,5,11,.97));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  animation:quizIn .26s ease both;
+}
+.quiz[hidden]{display:none}
+@keyframes quizIn{from{opacity:0}to{opacity:1}}
+.quiz-panel{
+  position:relative;width:min(940px,100%);max-height:calc(100vh - 44px);overflow:auto;
+  display:flex;flex-direction:column;
+  min-height:min(432px,calc(100vh - 44px));
+  padding:24px 30px 28px;border-radius:18px;
+  border:1px solid rgba(96,196,246,.26);
+  background:radial-gradient(ellipse 86% 52% at 50% -8%,#122741 0%,#081422 46%,#04080f 100%);
+  box-shadow:0 34px 90px rgba(0,0,0,.72),inset 0 0 0 1px rgba(120,220,255,.05);
+  animation:panelUp .34s cubic-bezier(.2,.8,.3,1) both;
+}
+@keyframes panelUp{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.quiz-head{display:flex;align-items:baseline;gap:12px;padding-right:48px}
+.quiz-kicker{
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11px;letter-spacing:.24em;color:#49c4f4;text-shadow:0 0 12px rgba(50,180,255,.45);
+}
+.quiz-head h2{margin:0;font-size:20px;font-weight:600;letter-spacing:.14em;color:#eef9ff}
+.quiz-close{
+  position:absolute;right:10px;top:10px;width:32px;height:32px;border-radius:50%;
+  border:1px solid rgba(96,196,246,.28);background:rgba(10,26,44,.8);
+  color:#9fd8f4;font-size:19px;line-height:1;cursor:pointer;
+  font-family:system-ui,sans-serif;transition:border-color .25s,color .25s,box-shadow .25s;
+}
+.quiz-close:hover{border-color:rgba(140,230,255,.7);color:#eafaff;box-shadow:0 0 14px rgba(60,180,240,.35)}
+.quiz-body{flex:1;display:flex;flex-direction:column;min-height:0}
+/* 内容短时整体居中，内容长时正常滚动（auto margin 不会裁掉顶部） */
+.q-stage{width:100%;margin:auto 0}
+
+.q-intro{
+  margin:24px 0 0;max-width:660px;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:12.5px;line-height:1.95;color:#8fb2c8;letter-spacing:.03em;
+}
+.q-intro b{color:#bfeaff;font-weight:400}
+.q-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 4px}
+.q-mode{
+  text-align:left;padding:20px 18px 17px;border-radius:12px;cursor:pointer;
+  border:1px solid rgba(90,170,220,.22);
+  background:linear-gradient(180deg,rgba(18,44,70,.55),rgba(6,16,28,.5));
+  color:inherit;font:inherit;transition:border-color .26s,box-shadow .26s,transform .26s;
+}
+.q-mode:hover{
+  border-color:rgba(120,225,255,.62);
+  box-shadow:0 0 22px rgba(40,150,220,.24),inset 0 0 30px rgba(30,120,190,.14);
+  transform:translateY(-2px);
+}
+.q-mode b{display:block;font-size:17px;font-weight:600;letter-spacing:.12em;color:#e9f8ff}
+.q-mode span{
+  display:block;margin-top:9px;font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11.5px;line-height:1.65;color:#8fb2c8;
+}
+.q-mode em{
+  display:block;margin-top:9px;font-style:normal;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:10.5px;letter-spacing:.08em;color:#4f9dc4;
+}
+.q-rule{
+  margin:16px 0 0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11.5px;line-height:1.85;color:#6e8ea6;letter-spacing:.02em;
+}
+.q-rule b{color:#9fd8f4;font-weight:400}
+
+.q-top{
+  display:flex;align-items:center;gap:16px;margin:4px 0 12px;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11.5px;letter-spacing:.1em;color:#7fa6bf;
+}
+.q-top b{color:#c6ecff;font-weight:600;font-size:13px}
+.q-top .grow{flex:1}
+.q-clock{color:#8ed9f7;font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.q-timer{
+  position:relative;height:3px;border-radius:3px;overflow:hidden;
+  background:rgba(80,150,200,.16);margin-bottom:14px;
+}
+.q-timer[hidden]{display:none}
+.q-timer i{
+  position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:3px;
+  background:linear-gradient(90deg,#2ea8ff,#7ce6ff);
+  box-shadow:0 0 12px rgba(80,200,255,.6);
+}
+.q-timer.warn i{background:linear-gradient(90deg,#ff9a4d,#ffd08a);box-shadow:0 0 12px rgba(255,150,80,.6)}
+
+.q-prompt{text-align:center;font-size:16px;letter-spacing:.12em;color:#dcefff;margin:10px 0 20px}
+.q-listen{display:flex;flex-direction:column;align-items:center;gap:11px;margin:0 0 24px}
+.q-play{
+  position:relative;width:92px;height:92px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;color:#d8f6ff;
+  border:1px solid rgba(110,215,255,.5);
+  background:radial-gradient(circle at 50% 38%,rgba(32,116,168,.55),rgba(8,22,38,.86));
+  transition:border-color .3s,box-shadow .3s,transform .3s;
+}
+.q-play svg{width:36px;height:36px;display:block}
+.q-play::after{
+  content:"";position:absolute;inset:-1px;border-radius:50%;
+  border:1px solid rgba(120,220,255,.55);opacity:0;
+}
+.q-play:hover{border-color:rgba(150,235,255,.9);box-shadow:0 0 26px rgba(60,180,255,.45)}
+.q-play:active{transform:scale(.97)}
+.q-play.sounding::after{animation:ring 1.15s ease-out infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.55);opacity:0}}
+.q-listen-hint{
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11px;letter-spacing:.08em;color:#7aa0b9;
+}
+
+.q-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.q-opt{
+  padding:18px 12px;border-radius:10px;cursor:pointer;text-align:center;
+  border:1px solid rgba(90,170,220,.2);background:rgba(12,30,48,.55);
+  color:#eaf8ff;font:inherit;
+  transition:border-color .22s,background .22s,box-shadow .22s,opacity .22s;
+}
+.q-opt em{display:block;font-style:normal;font-size:20px;letter-spacing:.1em;line-height:1.3}
+.q-opt small{
+  display:block;margin-top:5px;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:10.5px;letter-spacing:.08em;color:#5f93b3;
+}
+.q-opt:hover:not(:disabled){
+  border-color:rgba(130,230,255,.7);background:rgba(24,66,102,.7);
+  box-shadow:0 0 18px rgba(50,170,240,.28);
+}
+.q-opt:disabled{cursor:default}
+.q-opt.ok{
+  border-color:rgba(120,240,220,.85);background:rgba(16,80,80,.62);
+  box-shadow:0 0 22px rgba(40,220,200,.3);
+}
+.q-opt.ok em{color:#c8fff6}
+.q-opt.ok small{color:#79c9bb}
+.q-opt.bad{
+  border-color:rgba(255,140,130,.8);background:rgba(90,30,32,.62);
+  box-shadow:0 0 22px rgba(255,110,100,.24);
+}
+.q-opt.bad em{color:#ffd8d2}
+.q-opt.bad small{color:#c58a84}
+.q-opt.dim{opacity:.38}
+.q-foot{
+  display:flex;justify-content:space-between;gap:12px;margin:12px 2px 0;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:10.5px;letter-spacing:.08em;color:#4f7189;
+}
+
+.q-feedback{
+  display:none;margin-top:16px;padding:13px 15px;border-radius:10px;
+  border:1px solid rgba(90,170,220,.2);background:rgba(8,22,36,.72);
+}
+.q-feedback.show{display:block;animation:fadeUp .28s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.q-feedback .fb-line{
+  display:flex;align-items:center;gap:9px;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:13px;letter-spacing:.05em;
+}
+.q-feedback .fb-mark{font-size:14px;line-height:1}
+.q-feedback .fb-score{margin-left:auto;font-size:12px;color:#7fc9e8;letter-spacing:.06em}
+.q-feedback.ok{border-color:rgba(80,200,180,.32)}
+.q-feedback.ok .fb-line{color:#8ff2dd}
+.q-feedback.bad{border-color:rgba(230,130,120,.3)}
+.q-feedback.bad .fb-line{color:#ffb3a6}
+.q-feedback .fb-desc{
+  margin-top:7px;font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:11.5px;line-height:1.75;color:#8aa7bd;
+}
+.q-feedback .fb-act{text-align:right;margin-top:11px}
+
+.q-result{width:100%;margin:auto 0;text-align:center;padding-top:4px}
+.q-rank{
+  margin:12px 0 2px;font-size:27px;letter-spacing:.2em;text-indent:.2em;color:#eafaff;
+  text-shadow:0 0 26px rgba(90,200,255,.45),0 2px 10px rgba(0,0,0,.7);
+}
+.q-sub{
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:12px;letter-spacing:.08em;color:#83a5bb;
+}
+.q-sub .new-best{color:#ffd98a}
+.q-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 2px}
+.q-stat{padding:13px;border-radius:10px;border:1px solid rgba(90,170,220,.18);background:rgba(10,26,42,.6)}
+.q-stat b{display:block;font-size:24px;font-weight:600;color:#dff4ff;line-height:1.2}
+.q-stat span{
+  display:block;margin-top:5px;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:10.5px;letter-spacing:.1em;color:#6d92ab;
+}
+.q-wrong{margin:20px 0 0;text-align:left}
+.q-wrong h3{
+  margin:0 0 9px;font-size:11.5px;font-weight:400;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  letter-spacing:.14em;color:#6d92ab;
+}
+.q-wrong-item{
+  display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;
+  border:1px solid rgba(90,170,220,.14);background:rgba(10,24,38,.5);margin-bottom:7px;
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:12.5px;line-height:1.6;color:#a8c4d6;
+}
+.w-play{
+  flex:none;width:26px;height:26px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(100,200,245,.35);background:rgba(16,44,68,.7);
+  color:#bfeaff;font-size:10px;line-height:1;padding:0;
+  transition:border-color .2s,box-shadow .2s;
+}
+.w-play:hover{border-color:rgba(140,230,255,.8);box-shadow:0 0 12px rgba(60,180,240,.3)}
+.q-wrong-item .w-arrow{color:#42647a}
+.q-wrong-item .w-right{color:#9adfd0}
+.q-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.q-actions .btn{padding:9px 20px;font-size:13px;letter-spacing:.1em}
+
+@media(max-width:820px){
+  .quiz{padding:10px}
+  .quiz-panel{padding:18px 16px 20px;max-height:calc(100vh - 20px);border-radius:14px}
+  .q-modes{grid-template-columns:1fr;gap:9px}
+  .q-mode{padding:13px 14px}
+  .q-options{grid-template-columns:repeat(2,1fr);gap:8px}
+  .q-play{width:64px;height:64px}
+  .q-play svg{width:26px;height:26px}
+  .q-rank{font-size:22px}
+  .q-top{gap:10px;flex-wrap:wrap}
+}
+
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .card{height:clamp(210px,34vw,270px)}
+  .bottom{justify-content:center}
+  .info{text-align:center;flex-basis:100%}
+}
+@media(max-width:520px){
+  .wrap{padding:0 12px 28px}
+  .hero{padding:24px 0 18px}
+  .card{height:200px}
+  .meta{left:12px;bottom:12px}
+  .name{font-size:20px}
+  .dock{gap:7px;padding:9px 11px}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div id="stars" aria-hidden="true"></div>
+
+<!-- 乐器矢量图库：统一深蓝霓虹描边风格 -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="neon" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#63dcff" flood-opacity="0.85"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#1a86ff" flood-opacity="0.42"/>
+    </filter>
+    <linearGradient id="gBronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3c5563"/><stop offset=".42" stop-color="#16242e"/>
+      <stop offset=".7" stop-color="#0c151d"/><stop offset="1" stop-color="#2b4552"/>
+    </linearGradient>
+    <linearGradient id="gStone" x1="0" y1="0" x2=".8" y2="1">
+      <stop offset="0" stop-color="#476b86"/><stop offset=".5" stop-color="#1b3446"/>
+      <stop offset="1" stop-color="#0d1c29"/>
+    </linearGradient>
+    <radialGradient id="gClay" cx=".35" cy=".28" r=".85">
+      <stop offset="0" stop-color="#d18a58"/><stop offset=".55" stop-color="#a35832"/>
+      <stop offset="1" stop-color="#5b2c1b"/>
+    </radialGradient>
+    <linearGradient id="gHide" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0dfb8"/><stop offset="1" stop-color="#c2a87c"/>
+    </linearGradient>
+    <linearGradient id="gWood" x1="0" y1="0" x2=".9" y2="1">
+      <stop offset="0" stop-color="#7b4a2a"/><stop offset=".5" stop-color="#432514"/>
+      <stop offset="1" stop-color="#24140c"/>
+    </linearGradient>
+    <linearGradient id="gBamboo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8ac62"/><stop offset=".45" stop-color="#a97a37"/>
+      <stop offset="1" stop-color="#5b3d18"/>
+    </linearGradient>
+    <radialGradient id="gGourd" cx=".35" cy=".3" r=".8">
+      <stop offset="0" stop-color="#f2b955"/><stop offset=".6" stop-color="#c67c25"/>
+      <stop offset="1" stop-color="#7a440f"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 金 · 编钟 -->
+  <symbol id="art-jin" viewBox="0 0 260 200">
+    <g filter="url(#neon)" stroke="#66d9ff" stroke-width="1.4" stroke-linejoin="round">
+      <path d="M116 42c0-14 6-22 14-22s14 8 14 22" fill="none" stroke-width="3"/>
+      <path d="M120 42h20" fill="none" stroke-width="2"/>
+      <path d="M98 46h64l14 84c2 12-4 22-16 27-18 7-42 7-60 0-12-5-18-15-16-27z" fill="url(#gBronze)"/>
+      <path d="M84 132c2 12 12 20 26 24 14 4 26 4 40 0 14-4 24-12 26-24" fill="none" stroke-width="1.1" opacity=".8"/>
+      <path d="M96 60h68M92 76h76M88 92h84" fill="none" stroke-width=".8" opacity=".45"/>
+      <path d="M104 106h52M100 120h60" fill="none" stroke-width=".8" opacity=".35"/>
+      <g fill="#8be6ff" stroke="none" opacity=".75">
+        <circle cx="108" cy="68" r="2.2"/><circle cx="130" cy="68" r="2.2"/><circle cx="152" cy="68" r="2.2"/>
+        <circle cx="104" cy="84" r="2.2"/><circle cx="130" cy="84" r="2.2"/><circle cx="156" cy="84" r="2.2"/>
+        <circle cx="108" cy="100" r="2.2"/><circle cx="130" cy="100" r="2.2"/><circle cx="152" cy="100" r="2.2"/>
+      </g>
+      <path d="M118 112c8-6 16-6 24 0M116 122c9-5 19-5 28 0" fill="none" stroke-width=".9" opacity=".5"/>
+      <ellipse cx="130" cy="143" rx="7" ry="9" fill="#0a1a24" stroke-width="1.2"/>
+    </g>
+  </symbol>
+
+  <!-- 石 · 编磬 -->
+  <symbol id="art-shi" viewBox="0 0 260 200">
+    <g filter="url(#neon)" stroke="#6cdcff" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M72 44h46v34l72 34c9 4 12 12 8 20-4 8-13 11-21 7L74 96c-5-2-8-7-8-13V50c0-4 2-6 6-6z" fill="url(#gStone)"/>
+      <path d="M72 44h46v34" fill="none" opacity=".7"/>
+      <path d="M84 56h24M84 66h24M84 76h18" fill="none" stroke-width=".8" opacity=".35"/>
+      <path d="M128 92l62 30M120 84l64 30" fill="none" stroke-width=".7" opacity=".25"/>
+      <circle cx="103" cy="36" r="3.5" fill="#0b1e2c" stroke-width="1"/>
+      <path d="M103 36v8" fill="none" stroke-width="1" opacity=".7"/>
+      <path d="M92 128c26 10 52 18 76 26" fill="none" stroke-width="1" opacity=".45"/>
+    </g>
+  </symbol>
+
+  <!-- 土 · 埙 -->
+  <symbol id="art-tu" viewBox="0 0 260 200">
+    <g filter="url(#neon)" stroke="#6cdcff" stroke-width="1.4">
+      <path d="M130 30c-17 0-27 14-31 32-6 25-17 49-17 68 0 27 21 46 48 46s48-19 48-46c0-19-11-43-17-68-4-18-14-32-31-32z" fill="url(#gClay)"/>
+      <ellipse cx="130" cy="36" rx="10" ry="4.5" fill="#2a120a" stroke-width="1.2"/>
+      <g fill="#3a1a0e" stroke="#8be2ff" stroke-width=".9" opacity=".95">
+        <ellipse cx="108" cy="88" rx="5" ry="6"/><ellipse cx="152" cy="88" rx="5" ry="6"/>
+        <ellipse cx="102" cy="116" rx="5" ry="6"/><ellipse cx="130" cy="110" rx="5" ry="6"/>
+        <ellipse cx="158" cy="116" rx="5" ry="6"/>
+        <ellipse cx="115" cy="142" rx="5" ry="6"/><ellipse cx="145" cy="142" rx="5" ry="6"/>
+      </g>
+      <path d="M102 62c8-10 18-14 28-14" fill="none" stroke-width="1" opacity=".45"/>
+      <path d="M96 158c18 12 50 12 68 0" fill="none" stroke-width=".9" opacity=".4"/>
+    </g>
+  </symbol>
+
+  <!-- 革 · 鼓 -->
+  <symbol id="art-ge" viewBox="0 0 260 200">
+    <g filter="url(#neon)" stroke="#6cdcff" stroke-width="1.4" stroke-linejoin="round">
+      <path d="M62 76c0 24 0 42 0 56 0 24 136 24 136 0 0-14 0-32 0-56z" fill="url(#gWood)"/>
+      <ellipse cx="130" cy="76" rx="68" ry="23" fill="url(#gHide)"/>
+      <ellipse cx="130" cy="76" rx="58" ry="17" fill="none" stroke-width=".9" opacity=".55"/>
+      <g stroke="#8adfff" stroke-width=".8" opacity=".38" fill="none">
+        <path d="M78 82v52M96 88v56M114 91v58M146 91v58M164 88v56M182 82v52"/>
+      </g>
+      <g fill="#9fe8ff" stroke="none" opacity=".9">
+        <circle cx="72" cy="94" r="2"/><circle cx="94" cy="98" r="2"/><circle cx="116" cy="101" r="2"/>
+        <circle cx="144" cy="101" r="2"/><circle cx="166" cy="98" r="2"/><circle cx="188" cy="94" r="2"/>
+        <circle cx="72" cy="120" r="2"/><circle cx="94" cy="124" r="2"/><circle cx="116" cy="127" r="2"/>
+        <circle cx="144" cy="127" r="2"/><circle cx="166" cy="124" r="2"/><circle cx="188" cy="120" r="2"/>
+      </g>
+      <path d="M62 90c0 14 136 14 136 0" fill="none" stroke-width="1.1" opacity=".5"/>
+      <path d="M66 138c14 10 42 14 64 14s50-4 64-14" fill="none" stroke-width="1.1" opacity=".65"/>
+      <ellipse cx="130" cy="76" rx="68" ry="23" fill="none" stroke-width="2"/>
+    </g>
+  </symbol>
+
+  <!-- 丝 · 古琴 -->
+  <symbol id="art-si" viewBox="0 0 260 200">
+    <g filter="url(#neon)" stroke="#6cdcff" stroke-width="1.4" stroke-linejoin="round">
+      <path d="M24 96c0-10 8-16 20-17l174-3c14 0 22 6 22 17 0 10-8 17-22 17l-174 3c-12 1-20-6-20-17z" fill="url(#gWood)"/>
+      <path d="M26 106c8 8 16 10 20 10l172-3c12 0 18-4 20-9" fill="none" stroke-width="1" opacity=".55"/>
+      <g stroke="#c8eeff" stroke-width=".7" opacity=".75">
+        <path d="M38 84h188M38 88h188M38 92h188M38 96h188M38 100h188M38 104h188M38 108h188"/>
+      </g>
+      <g fill="#e9f8ff" stroke="none" opacity=".85">
+        <circle cx="60" cy="82" r="1.5"/><circle cx="88" cy="82" r="1.5"/><circle cx="116" cy="82" r="1.5"/>
+        <circle cx="144" cy="82" r="1.5"/><circle cx="172" cy="82" r="1.5"/><circle cx="200" cy="82" r="1.5"/>
+      </g>
+      <path d="M32 79c6-4 12-5 18-5M224 80c6 1 10 4 12 8" fill="none" stroke-width="1" opacity=".6"/>
+      <path d="M44 76c50-4 122-5 174-4" fill="none" stroke-width=".8" opacity=".35"/>
+    </g>
+  </symbol>
+
+  <!-- 木 · 柷 -->
+  <symbol id="art-mu" viewBox="0 0 260 200">
+    <g filter="url(#neon)" stroke="#6cdcff" stroke-width="1.4" stroke-linejoin="round">
+      <path d="M56 66l148 0 16 16-180 0z" fill="#2a1a10"/>
+      <path d="M62 54h136l20 14H42z" fill="url(#gWood)"/>
+      <path d="M42 68h176l-12 84H54z" fill="url(#gWood)"/>
+      <path d="M54 152h152" fill="none" stroke-width="2"/>
+      <path d="M42 68l12 84M218 68l-12 84" fill="none" stroke-width="1.2" opacity=".8"/>
+      <g fill="none" stroke="#a6e6ff" stroke-width=".7" opacity=".3">
+        <path d="M50 86h160M52 104h156M54 122h152M56 140h148"/>
+      </g>
+      <path d="M42 68h176" fill="none" stroke-width="2"/>
+      <g fill="#8fe3ff" stroke="none" opacity=".8">
+        <circle cx="52" cy="76" r="1.8"/><circle cx="208" cy="76" r="1.8"/>
+        <circle cx="58" cy="144" r="1.8"/><circle cx="202" cy="144" r="1.8"/>
+      </g>
+      <path d="M78 54l-8-14h120l8 14" fill="none" stroke-width="1" opacity=".35"/>
+      <path d="M130 40v14" fill="none" stroke-width="1" opacity=".3"/>
+    </g>
+  </symbol>
+
+  <!-- 匏 · 笙 -->
+  <symbol id="art-pao" viewBox="0 0 260 200">
+    <g filter="url(#neon)" stroke="#6cdcff" stroke-width="1.2">
+      <g fill="url(#gBamboo)">
+        <path d="M103 84h8v44h-8zM113 68h8v60h-8zM123 56h8v72h-8zM133 48h8v80h-8zM143 54h8v74h-8zM153 66h8v62h-8zM163 82h8v46h-8z"/>
+        <path d="M95 96h8v32h-8zM171 96h8v32h-8z"/>
+      </g>
+      <g fill="none" stroke="#ffe1a6" stroke-width=".7" opacity=".55">
+        <path d="M103 100h8M113 88h8M123 78h8M133 70h8M143 76h8M153 88h8M163 100h8"/>
+        <path d="M103 116h8M113 112h8M123 108h8M133 104h8M143 108h8M153 112h8M163 116h8"/>
+      </g>
+      <g fill="#1a1008" stroke="none" opacity=".8">
+        <circle cx="107" cy="108" r="1.6"/><circle cx="117" cy="100" r="1.6"/><circle cx="127" cy="92" r="1.6"/>
+        <circle cx="137" cy="86" r="1.6"/><circle cx="147" cy="92" r="1.6"/><circle cx="157" cy="100" r="1.6"/><circle cx="167" cy="108" r="1.6"/>
+      </g>
+      <path d="M130 120c-24 0-38 16-38 32 0 20 17 34 38 34s38-14 38-34c0-16-14-32-38-32z" fill="url(#gGourd)"/>
+      <path d="M100 130h60" fill="none" stroke-width="2.4" opacity=".8"/>
+      <path d="M106 146c-6 10-6 22 0 30M154 146c6 10 6 22 0 30" fill="none" stroke-width=".9" opacity=".45"/>
+      <ellipse cx="130" cy="122" rx="34" ry="6" fill="#3a2109" stroke-width="1" opacity=".9"/>
+    </g>
+  </symbol>
+
+  <!-- 竹 · 箫 -->
+  <symbol id="art-zhu" viewBox="0 0 260 200">
+    <g filter="url(#neon)" stroke="#6cdcff" stroke-width="1.3">
+      <g transform="rotate(-38 130 100)">
+        <rect x="22" y="91" width="216" height="17" rx="8" fill="url(#gBamboo)"/>
+        <path d="M22 91h10v17H22" fill="none" stroke-width="1.2"/>
+        <path d="M32 91c-5 3-7 6-7 8.5s2 5.5 7 8.5" fill="#241708" stroke-width="1.1"/>
+        <g fill="none" stroke="#f0cf8f" stroke-width="1" opacity=".55">
+          <path d="M62 91v17M96 91v17M130 91v17M164 91v17M198 91v17"/>
+        </g>
+        <g fill="#1c1207" stroke="#a8e7ff" stroke-width=".8">
+          <ellipse cx="112" cy="99.5" rx="3.4" ry="2.6"/>
+          <ellipse cx="130" cy="99.5" rx="3.4" ry="2.6"/>
+          <ellipse cx="148" cy="99.5" rx="3.4" ry="2.6"/>
+          <ellipse cx="166" cy="99.5" rx="3.4" ry="2.6"/>
+          <ellipse cx="184" cy="99.5" rx="3.4" ry="2.6"/>
+          <ellipse cx="202" cy="99.5" rx="3.4" ry="2.6"/>
+        </g>
+        <path d="M36 93h196" fill="none" stroke="#ffe6b0" stroke-width=".8" opacity=".35"/>
+        <path d="M228 91h10v17h-10" fill="none" stroke-width="1.2"/>
+      </g>
+    </g>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header class="hero">
+    <h1>八音分类体验馆</h1>
+    <p>点击卡片，聆听中国古代雅乐之声</p>
+  </header>
+
+  <main class="grid" id="grid" aria-label="八音乐器卡片"></main>
+
+  <div class="bottom">
+    <section class="info" aria-live="polite">
+      <div class="info-title" id="infoTitle">八音 · 金、石、土、革、丝、木、匏、竹</div>
+      <div class="info-desc" id="infoDesc">中国最早按制作材料划分乐器的分类法，始于西周。点击任意一件乐器，聆听它的声音与故事。</div>
+      <div class="info-src" id="infoSrc">音色：Web Audio 实时合成 · 支持接入真实录音</div>
+    </section>
+    <div class="dock">
+      <button class="btn primary" id="btnAll" type="button">连奏八音</button>
+      <button class="btn" id="btnStop" type="button">停止</button>
+      <button class="btn" id="btnQuiz" type="button">听辨游戏</button>
+      <label class="vol">音量 <input id="vol" type="range" min="0" max="100" value="72" aria-label="音量"></label>
+    </div>
+  </div>
+
+  <p class="footnote"><span class="hint">小提示：</span>按数字键 1–8 可演奏对应乐器 · 空格或 Esc 停止 · 点「听辨游戏」可做听音辨器小测 · 本页按「金 石 土 木 / 丝 竹 匏 革」陈列，传统八音次序为金 石 土 革 丝 木 匏 竹 · 乐器照片放在 images/ 目录，可自行替换</p>
+</div>
+
+<!-- 听辨音色小游戏 -->
+<div class="quiz" id="quiz" hidden>
+  <div class="quiz-panel" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+    <div class="quiz-head">
+      <span class="quiz-kicker">听 辨 · 八 音</span>
+      <h2 id="quizTitle">听辨音色小游戏</h2>
+      <button class="quiz-close" id="quizClose" type="button" aria-label="关闭游戏">×</button>
+    </div>
+    <div class="quiz-body" id="quizBody"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   真实录音替换入口：把音频文件放到同目录下，填入相对路径即可。
+   例如把 编钟.mp3 放到 ./audio/jin.mp3，则写 jin:"./audio/jin.mp3"
+   留空时使用下方 Web Audio 实时合成音色。
+   ============================================================ */
+const AUDIO_SOURCES = {
+  jin:"", shi:"", tu:"", ge:"", si:"", mu:"", pao:"", zhu:""
+};
+
+const N = {
+  C3:130.81, D3:146.83, F3:174.61, G3:196.00, A3:220.00,
+  C4:261.63, D4:293.66, E4:329.63, G4:392.00, A4:440.00,
+  C5:523.25, D5:587.33, E5:659.25, G5:783.99, A5:880.00
+};
+const n = (f,d,gap,vel) => ({f,d,gap:gap===undefined?.1:gap,vel:vel===undefined?.9:vel});
+
+const INSTRUMENTS = [
+  {
+    id:"jin", material:"金", name:"编钟", voice:"bell",
+    desc:"青铜铸成，一钟双音，大小成编。金石之声庄重悠远，为周代雅乐之首，曾侯乙编钟即其巅峰。",
+    melody:[n(N.C5,.95,.2,1),n(N.G4,.95,.2,.85),n(N.A4,.95,.18,.9),n(N.C5,1.15,.2,1),n(N.E5,.95,.18,.8),n(N.D5,1.5,.1,.85)]
+  },
+  {
+    id:"shi", material:"石", name:"编磬", voice:"stone",
+    desc:"以石灰岩或玉石磨制成倨句之形，悬而击之。声清越短促，与编钟相和，所谓「金石之声」。",
+    melody:[n(N.E5,.6,.14,.9),n(N.D5,.6,.14,.82),n(N.C5,.65,.14,.85),n(N.A4,.65,.14,.78),n(N.G4,1.05,.1,.8)]
+  },
+  {
+    id:"tu", material:"土", name:"埙", voice:"xun",
+    desc:"陶土烧制，闭口吹奏。音色苍古幽咽，如旷野长风，是最古老的吹奏乐器之一。",
+    melody:[n(N.A4,1.15,.12,.9),n(N.G4,1.15,.12,.85),n(N.E4,1.25,.14,.8),n(N.D4,1.15,.12,.85),n(N.C4,1.7,.1,.9)]
+  },
+  {
+    id:"ge", material:"革", name:"鼓", voice:"drum",
+    desc:"以皮革蒙面，木为框。鼓声震发阳气、节制节奏，为众乐之帅，庙堂雅乐不可或缺。",
+    melody:[n(N.A3,.5,.26,1),n(N.A3,.5,.3,.8),n(N.A3,.5,.24,.9),n(N.G3,.55,.42,1),n(N.A3,.5,.26,.85),n(N.C3,.7,.1,1)]
+  },
+  {
+    id:"si", material:"丝", name:"古琴", voice:"qin",
+    desc:"桐木为身，蚕丝为弦，七弦十三徽，无柱无品。散音沉厚、按音坚实、泛音清越，余音绵长，可作走手音。",
+    /* 正调（C D F G A）五声音阶：先散音起，再按音下行，末尾泛音收 */
+    melody:[
+      n(N.C3,1.9,.06,.95),
+      n(N.A3,1.15,.05,.8),
+      n(N.G3,1.15,.05,.85),
+      Object.assign(n(N.F3,1.35,.05,.78),{slide:26}),
+      n(N.D3,1.2,.06,.82),
+      Object.assign(n(N.C5,1.05,.10,.55),{h:true}),
+      Object.assign(n(N.G5,1.15,.08,.5),{h:true}),
+      n(N.C3,2.3,0,.9)
+    ]
+  },
+  {
+    id:"mu", material:"木", name:"柷", voice:"zhu",
+    desc:"方形木斗，上宽下窄，以木椎撞其内壁发声。雅乐起奏时先击柷，用以「合乐」。",
+    melody:[n(N.G3,.32,.16,1),n(N.G3,.32,.18,.85),n(N.G3,.45,.1,1)]
+  },
+  {
+    id:"pao", material:"匏", name:"笙", voice:"sheng",
+    desc:"匏为斗、竹为管、簧为舌，一管一音而能同时吹出和声，是中国最早的和声乐器。",
+    melody:[n(N.C4,1.25,.1,.8),n(N.E4,1.25,.1,.8),n(N.G4,1.25,.1,.8),n(N.A4,1.4,.1,.85),n(N.G4,1.7,.1,.8)]
+  },
+  {
+    id:"zhu", material:"竹", name:"箫", voice:"xiao",
+    desc:"竹管竖吹，上端开吹口，管壁列指孔。音色圆润含蓄，气韵悠长，最宜月夜清吹。",
+    melody:[n(N.A4,1.05,.08,.9),n(N.C5,1.15,.08,.85),n(N.D5,1.2,.1,.9),n(N.E5,1.15,.08,.85),n(N.D5,1.05,.08,.8),n(N.C5,1.15,.1,.85),n(N.A4,1.8,.08,.9)]
+  }
+];
+
+/* 横版陈列顺序：上行 金·石·土·木 / 下行 丝·竹·匏·革 */
+const LAYOUT = ["jin","shi","tu","mu","si","zhu","pao","ge"];
+INSTRUMENTS.sort((a,b)=>LAYOUT.indexOf(a.id)-LAYOUT.indexOf(b.id));
+
+/* ---------- 卡片渲染 ---------- */
+const DROP_SVG = '<svg viewBox="0 0 24 30"><path d="M12 2C12 2 3 13 3 19a9 9 0 0 0 18 0c0-6-9-17-9-17z" fill="rgba(120,215,255,.22)" stroke="#a5eaff" stroke-width="1.4"/><circle cx="9" cy="17.5" r="1.7" fill="#eafaff" stroke="none"/></svg>';
+const grid = document.getElementById("grid");
+const PHOTO_EXT = ["png","jpg","jpeg","webp"];
+INSTRUMENTS.forEach((it,i)=>{
+  const card = document.createElement("button");
+  card.type = "button";
+  card.className = "card";
+  card.dataset.index = i;
+  card.setAttribute("aria-label","播放 "+it.material+"·八音 "+it.name);
+  card.innerHTML =
+    '<span class="podium"></span>'+
+    '<span class="art">'+
+      '<img class="photo" src="images/'+it.id+'.png" alt="'+it.name+'实物图">'+
+      '<svg class="fallback" viewBox="0 0 260 200" aria-hidden="true"><use href="#art-'+it.id+'"></use></svg>'+
+    '</span>'+
+    '<span class="drop">'+DROP_SVG+'</span>'+
+    '<span class="meta"><span class="tag">'+it.material+' · 八音</span><span class="name">'+it.name+'</span></span>'+
+    '<span class="badge">演奏中<span class="wave"><i></i><i></i><i></i></span></span>';
+  const img = card.querySelector(".photo");
+  let k = 0;
+  img.addEventListener("error",()=>{
+    k++;
+    if(k < PHOTO_EXT.length){ img.src = "images/"+it.id+"."+PHOTO_EXT[k]; }
+    else { img.style.display="none"; img.parentNode.classList.add("no-photo"); }
+  });
+  card.addEventListener("click",()=>playInstrument(i));
+  grid.appendChild(card);
+});
+
+/* 星点背景 */
+(function(){
+  const box = document.getElementById("stars");
+  let html = "";
+  for(let i=0;i<90;i++){
+    const x=(Math.random()*100).toFixed(2), y=(Math.random()*100).toFixed(2);
+    const s=(Math.random()*1.6+.5).toFixed(2), del=(Math.random()*5).toFixed(2), dur=(3+Math.random()*5).toFixed(2);
+    html += '<span class="star" style="left:'+x+'%;top:'+y+'%;width:'+s+'px;height:'+s+'px;animation-delay:-'+del+'s;animation-duration:'+dur+'s"></span>';
+  }
+  box.innerHTML = html;
+})();
+
+/* ---------- 音频引擎 ---------- */
+let ctx=null, master=null, session=null, stopTimer=null, audioEl=null, noiseBuf=null;
+let allTimer=null, cueTimer=null;
+
+function makeIR(ac, seconds, decay){
+  const len = Math.floor(ac.sampleRate*seconds);
+  const buf = ac.createBuffer(2,len,ac.sampleRate);
+  for(let ch=0;ch<2;ch++){
+    const d = buf.getChannelData(ch);
+    for(let i=0;i<len;i++) d[i] = (Math.random()*2-1)*Math.pow(1-i/len,decay);
+  }
+  return buf;
+}
+function ensureAudio(){
+  if(ctx) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  ctx = new AC();
+  master = ctx.createGain();
+  master.gain.value = (document.getElementById("vol").value/100)*0.9;
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value=-16; comp.knee.value=22; comp.ratio.value=3;
+  comp.attack.value=.004; comp.release.value=.28;
+  master.connect(comp); comp.connect(ctx.destination);
+  const conv = ctx.createConvolver();
+  conv.buffer = makeIR(ctx,2.1,2.7);
+  const wet = ctx.createGain(); wet.gain.value=.26;
+  master.connect(conv); conv.connect(wet); wet.connect(comp);
+}
+function getNoise(){
+  if(noiseBuf) return noiseBuf;
+  noiseBuf = ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);
+  const d = noiseBuf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  return noiseBuf;
+}
+function tone(s,dest,o){
+  const {type="sine",freq=440,t=0,dur=1,peak=.2,atk=.01,detune=0}=o;
+  const osc = ctx.createOscillator(); osc.type=type;
+  osc.frequency.setValueAtTime(freq,t); osc.detune.value=detune;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(.0001,t);
+  g.gain.exponentialRampToValueAtTime(Math.max(peak,.0002),t+Math.max(.003,atk));
+  g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  osc.connect(g); g.connect(dest);
+  osc.start(t); osc.stop(t+dur+.05);
+  s.nodes.push(osc,g);
+  return {osc,g};
+}
+function noiseBurst(s,dest,t,dur,o){
+  const {type="bandpass",freq=1200,q=1,peak=.05,atk=.005}=o||{};
+  const src = ctx.createBufferSource(); src.buffer=getNoise(); src.loop=true;
+  const f = ctx.createBiquadFilter(); f.type=type; f.frequency.value=freq; f.Q.value=q;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(.0001,t);
+  g.gain.exponentialRampToValueAtTime(Math.max(peak,.0002),t+Math.max(.003,atk));
+  g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  src.connect(f); f.connect(g); g.connect(dest);
+  src.start(t,Math.random()*1.5); src.stop(t+dur+.04);
+  s.nodes.push(src,f,g);
+}
+function vibrato(s,osc,t,dur,rate,depth){
+  const l = ctx.createOscillator(); l.type="sine"; l.frequency.value=rate;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(depth,t+.3);
+  l.connect(g); g.connect(osc.frequency);
+  l.start(t); l.stop(t+dur+.05);
+  s.nodes.push(l,g);
+}
+
+/* 丝弦预合成：一维数字波导（Karplus-Strong）
+   f 基频；bright 激励亮度；damp 环路高频损耗；t60 衰减到 -60dB 的时间 */
+const PLUCK_CACHE = new Map();
+function pluckBuffer(f,seconds,o){
+  const opt=o||{};
+  const bright = opt.bright===undefined?.62:opt.bright;
+  const damp   = opt.damp===undefined?.58:opt.damp;
+  const t60    = opt.t60===undefined?4.6:opt.t60;
+  const pluck = opt.pluck===undefined?.22:opt.pluck;
+  const key=[f.toFixed(3),seconds.toFixed(2),bright,damp,t60,pluck].join("|");
+  const cached=PLUCK_CACHE.get(key);
+  if(cached) return cached;
+
+  const sr=ctx.sampleRate, len=Math.max(256,Math.ceil(sr*seconds));
+  const buf=ctx.createBuffer(1,len,sr);
+  const out=buf.getChannelData(0);
+  /* 一阶低通带来的相位延迟按 damp/(1-damp) 个采样补偿，否则音准偏低 */
+  const N=Math.max(8,sr/f-damp/(1-damp));
+  const L=Math.floor(N)+3;
+  const ring=new Float32Array(L);
+
+  /* 激励：按拨点位置（岳山内侧约 1/5）生成三角位移，谐波按 1/n² 分布；
+     再叠少量柔化噪声，补一点丝弦的摩擦质感。用随机噪声整段激励会让各次谐波
+     强弱随机，低音听起来发空，所以这里改成确定形状。 */
+  let nz=0;
+  for(let i=0;i<L;i++){
+    const x=i/L;
+    const tri = x<pluck ? x/pluck : (1-x)/(1-pluck);
+    nz += .5*((Math.random()*2-1)-nz);
+    ring[i]=tri + nz*bright*.1;
+  }
+  let mean=0; for(let i=0;i<L;i++) mean+=ring[i]; mean/=L;
+  let peak=1e-9;
+  for(let i=0;i<L;i++){ ring[i]-=mean; peak=Math.max(peak,Math.abs(ring[i])); }
+  for(let i=0;i<L;i++) ring[i]/=peak;
+
+  const g=Math.pow(.001,1/Math.max(1,t60*f));   /* 每周期环路增益 → 指定 T60 */
+  let lp=0;
+  for(let n=0;n<len;n++){
+    const dp=n-N, base=Math.floor(dp);
+    const i0=((base%L)+L)%L, i1=(i0+1)%L, fr=dp-base;
+    const s0=ring[i0]*(1-fr)+ring[i1]*fr;
+    lp=s0*(1-damp)+lp*damp;
+    ring[n%L]=lp*g;
+    out[n]=s0;
+  }
+  /* 归一化并首尾淡化，避免爆音 */
+  let pk=1e-9; for(let i=0;i<len;i++) pk=Math.max(pk,Math.abs(out[i]));
+  const norm=.92/pk;
+  const fi=Math.min(len,Math.floor(sr*.002)), fo=Math.min(len,Math.floor(sr*.06));
+  for(let i=0;i<len;i++){
+    let a=norm;
+    if(i<fi) a*=i/fi;
+    if(i>=len-fo) a*=(len-i)/fo;
+    out[i]*=a;
+  }
+  PLUCK_CACHE.set(key,buf);
+  return buf;
+}
+
+/* 模态振荡：用于鼓皮、木箱这类"敲一下、按自身共振衰减"的发声体
+   freq 共振频率；peak 起始峰值；decay 衰减时长；drop 起始音高偏移（敲击瞬间偏高）；dt 回落时间 */
+function mode(s,dest,freq,t,peak,decay,drop,dt){
+  const o=ctx.createOscillator(); o.type="sine";
+  const f0=freq*(1+(drop||0));
+  o.frequency.setValueAtTime(f0,t);
+  if(drop) o.frequency.exponentialRampToValueAtTime(freq,t+(dt||.03));
+  const g=ctx.createGain();
+  g.gain.setValueAtTime(.0001,t);
+  g.gain.exponentialRampToValueAtTime(Math.max(peak,.0002),t+.004);
+  g.gain.exponentialRampToValueAtTime(.0001,t+decay);
+  o.connect(g); g.connect(dest);
+  o.start(t); o.stop(t+decay+.03);
+  s.nodes.push(o,g);
+  return {osc:o,gain:g};
+}
+/* 软饱和曲线：给鼓一点非线性，敲击才有"实心"的感觉 */
+let SOFT_CURVE=null;
+function softCurve(){
+  if(SOFT_CURVE) return SOFT_CURVE;
+  const n=2048, c=new Float32Array(n);
+  for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=Math.tanh(x*1.5)/Math.tanh(1.5); }
+  SOFT_CURVE=c; return c;
+}
+
+/* 八种音色合成器 */
+const VOICES = {
+  /* 金：非谐波泛音 + 长衰减，金属钟体 */
+  bell(s,dest,f,t,dur,vel){
+    const p=[[1,1,2.5],[2.0,.45,1.6],[2.76,.32,1.15],[5.4,.17,.6],[8.9,.09,.38]];
+    p.forEach(([r,a,dec])=>{
+      tone(s,dest,{freq:f*r,t,dur:Math.min(dur*1.5,dec),peak:a*vel*.24,atk:.006});
+    });
+    noiseBurst(s,dest,t,.06,{type:"bandpass",freq:f*3.2,q:1.4,peak:.055*vel,atk:.002});
+  },
+  /* 石：泛音少、衰减快，清脆而干 */
+  stone(s,dest,f,t,dur,vel){
+    const p=[[1,1,1.05],[2.42,.34,.6],[3.9,.16,.38],[5.1,.08,.25]];
+    p.forEach(([r,a,dec])=>{
+      tone(s,dest,{freq:f*r,t,dur:Math.min(dur,dec),peak:a*vel*.26,atk:.004});
+    });
+    noiseBurst(s,dest,t,.045,{type:"highpass",freq:2600,peak:.075*vel,atk:.002});
+  },
+  /* 土：柔和正弦为主，带气声与颤音 */
+  xun(s,dest,f,t,dur,vel){
+    const a=tone(s,dest,{freq:f*.99,t,dur,peak:.26*vel,atk:.1});
+    a.osc.frequency.linearRampToValueAtTime(f,t+.11);
+    vibrato(s,a.osc,t,dur,4.7,f*.004);
+    tone(s,dest,{freq:f*2,t,dur:dur*.8,peak:.028*vel,atk:.14});
+    noiseBurst(s,dest,t,dur*.9,{type:"bandpass",freq:f*2.2,q:.8,peak:.022*vel,atk:.09});
+  },
+  /* 革：堂鼓 —— 鼓膜各阶模态（1 : 1.59 : 2.14 : 2.65）+ 木槌撞击 + 轻饱和 */
+  drum(s,dest,f,t,dur,vel){
+    const base=84*(1+Math.max(-.12,Math.min(.12,(f-220)/220*.5)));   /* 鼓腔基频基本固定，只随击点微变 */
+    const shaper=ctx.createWaveShaper(); shaper.curve=softCurve(); shaper.oversample="2x";
+    const post=ctx.createGain(); post.gain.value=.5;
+    shaper.connect(post); post.connect(dest);
+    s.nodes.push(shaper,post);
+    const decay=Math.max(.55,dur*.95);
+    [[1,1,decay,.5,.035],[1.59,.42,decay*.68,.34,.03],
+     [2.14,.22,decay*.5,.2,.02],[2.65,.12,decay*.38,.14,.016]].forEach(([r,a,d,drop,dt])=>{
+      mode(s,shaper,base*r,t,a*vel*.75,d,drop,dt);
+    });
+    /* 槌头触皮：硬木槌的宽频"啪"，加鼓皮被压下去的"扑" */
+    noiseBurst(s,shaper,t,.028,{type:"bandpass",freq:1700,q:.8,peak:.3*vel,atk:.001});
+    noiseBurst(s,shaper,t,.016,{type:"highpass",freq:4000,peak:.1*vel,atk:.001});
+    noiseBurst(s,shaper,t,.075,{type:"lowpass",freq:240,q:.7,peak:.34*vel,atk:.002});
+  },
+  /* 丝：古琴 —— 丝弦数字波导（Karplus-Strong）预合成
+     DelayNode 在反馈回路里会被浏览器强制对齐 128 采样，音高不可靠，
+     所以弦振动改成在 JS 里逐采样算好、存进 AudioBuffer 再播放。 */
+  qin(s,dest,f,t,dur,vel,step){
+    /* 泛音：轻点徽位，清越透明、衰减快，基音为主 */
+    if(step && step.h){
+      [[1,1,.95],[2,.15,.55],[3,.055,.34],[4.01,.025,.2]].forEach(([r,a,dec])=>{
+        tone(s,dest,{freq:f*r,t,dur:Math.min(dur*1.15,dec*1.3),peak:a*vel*.26,atk:.004});
+      });
+      noiseBurst(s,dest,t,.028,{type:"bandpass",freq:f*4,q:1.2,peak:.022*vel,atk:.001});
+      return;
+    }
+    const src=ctx.createBufferSource();
+    src.buffer=pluckBuffer(f,Math.min(dur+1.8,5.8),{bright:.62,damp:.55,t60:6,pluck:.16});
+    /* 琴体：厚木腔的低声区隆起 + 面板共振 + 高频收束，去掉电子味 */
+    const low =ctx.createBiquadFilter(); low.type="lowshelf"; low.frequency.value=150; low.gain.value=2.5;
+    const body=ctx.createBiquadFilter(); body.type="peaking"; body.frequency.value=210; body.Q.value=1; body.gain.value=2;
+    const wood=ctx.createBiquadFilter(); wood.type="peaking"; wood.frequency.value=430; wood.Q.value=1.4; wood.gain.value=1.6;
+    const air =ctx.createBiquadFilter(); air.type="lowpass";  air.frequency.value=4200; air.Q.value=.5;
+    const g=ctx.createGain(); g.gain.value=vel*.42;
+    src.connect(low); low.connect(body); body.connect(wood); wood.connect(air); air.connect(g); g.connect(dest);
+    /* 走手音：按音弹后指循弦走，尾音轻微下滑 */
+    if(step && step.slide && src.detune){
+      src.detune.setValueAtTime(0,t);
+      src.detune.linearRampToValueAtTime(-step.slide,t+dur*.85);
+    }
+    src.start(t);
+    s.nodes.push(src,low,body,wood,air,g);
+    /* 指甲触弦的细碎声，给起音一点颗粒 */
+    noiseBurst(s,dest,t,.02,{type:"bandpass",freq:Math.min(5200,f*14),q:.9,peak:.02*vel,atk:.001});
+  },
+  /* 木：柷 —— 木箱模态 + 木椎撞击，干、短、有腔体共鸣 */
+  zhu(s,dest,f,t,dur,vel){
+    const base=176+Math.max(-14,Math.min(14,(f-196)*.25));   /* 木箱腔体，不随音高走 */
+    [[1,1,.44,.18,.012],[2.32,.44,.26,.12,.009],
+     [3.86,.24,.15,.08,.007],[5.5,.13,.09,.05,.006]].forEach(([r,a,d,drop,dt])=>{
+      mode(s,dest,base*r,t,a*vel*.42,d,drop,dt);
+    });
+    /* 木椎敲在箱壁：硬碰硬的短促咔声 + 箱内空气的低频鼓动 */
+    noiseBurst(s,dest,t,.02,{type:"bandpass",freq:2500,q:1,peak:.3*vel,atk:.001});
+    noiseBurst(s,dest,t,.012,{type:"highpass",freq:5200,peak:.12*vel,atk:.001});
+    noiseBurst(s,dest,t,.055,{type:"lowpass",freq:520,q:.8,peak:.24*vel,atk:.002});
+  },
+  /* 匏：笙 —— 自由簧的谐波列（约 1/n）、簧片轻微失谐拍频、鼻音共振、吹气声 */
+  sheng(s,dest,f,t,dur,vel){
+    const lp=ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=3800; lp.Q.value=.7;
+    const fm1=ctx.createBiquadFilter(); fm1.type="peaking"; fm1.frequency.value=1500; fm1.Q.value=1.2; fm1.gain.value=3;
+    const fm2=ctx.createBiquadFilter(); fm2.type="peaking"; fm2.frequency.value=2800; fm2.Q.value=1.6; fm2.gain.value=2;
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(.5*vel,t+.075);        /* 簧片要"吹"起来，起音偏慢 */
+    g.gain.setValueAtTime(.5*vel,t+dur*.9);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur+.06);
+    lp.connect(fm1); fm1.connect(fm2); fm2.connect(g); g.connect(dest);
+    s.nodes.push(lp,fm1,fm2,g);
+    /* 单根簧片：基频 + 谐波列，各分音带一点失谐形成自然的"簧颤" */
+    const reed=(freq,amp,det,decay,vib)=>{
+      const o=ctx.createOscillator(); o.type="sine";
+      o.frequency.setValueAtTime(freq,t); o.detune.value=det;
+      const gg=ctx.createGain();
+      gg.gain.setValueAtTime(.0001,t);
+      gg.gain.exponentialRampToValueAtTime(Math.max(amp,.0002),t+.08);
+      gg.gain.setValueAtTime(Math.max(amp,.0002),t+decay*.92);
+      gg.gain.exponentialRampToValueAtTime(.0001,t+decay);
+      o.connect(gg); gg.connect(lp);
+      o.start(t); o.stop(t+decay+.04);
+      s.nodes.push(o,gg);
+      if(vib) vibrato(s,o,t,decay,4.6,freq*.0035);
+    };
+    for(let n=1;n<=9;n++){
+      const amp=.30*vel/Math.pow(n,.85);
+      const det=n<=3?((n%2)?-4:4):(Math.random()*4-2);
+      reed(f*n,amp,det,dur+.06,n<=3);
+    }
+    /* 传统笙常带五度、八度和音 */
+    for(let n=1;n<=4;n++) reed(f*1.5*n,.115*vel/Math.pow(n,.9),(n%2?3:-3),dur+.05,false);
+    for(let n=1;n<=3;n++) reed(f*2*n,.10*vel/Math.pow(n,.9),(n%2?-3:3),dur+.05,false);
+    /* 吹气：气流通过簧片的细密噪声 */
+    noiseBurst(s,lp,t,dur*.9,{type:"bandpass",freq:1500,q:.6,peak:.05*vel,atk:.06});
+    noiseBurst(s,lp,t,.12,{type:"highpass",freq:4200,peak:.012*vel,atk:.02});
+  },
+  /* 竹：气鸣长音，慢起音 + 颤音 + 气声 */
+  xiao(s,dest,f,t,dur,vel){
+    const a=tone(s,dest,{freq:f*.985,t,dur,peak:.24*vel,atk:.13});
+    a.osc.frequency.linearRampToValueAtTime(f,t+.14);
+    vibrato(s,a.osc,t,dur,4.4,f*.005);
+    tone(s,dest,{freq:f*2,t,dur:dur*.85,peak:.026*vel,atk:.17});
+    noiseBurst(s,dest,t,dur*.92,{type:"bandpass",freq:f*2.6,q:.7,peak:.026*vel,atk:.12});
+  }
+};
+
+/* ---------- 播放控制 ---------- */
+function newSession(){
+  stopAll();
+  const g = ctx.createGain(); g.gain.value=1; g.connect(master);
+  session = {gain:g,nodes:[]};
+  return session;
+}
+function stopAll(){
+  clearTimeout(stopTimer); stopTimer=null;
+  clearTimeout(allTimer); allTimer=null;
+  clearTimeout(cueTimer); cueTimer=null;
+  if(session){
+    const s=session; session=null;
+    try{
+      s.gain.gain.cancelScheduledValues(ctx.currentTime);
+      s.gain.gain.setValueAtTime(Math.max(s.gain.gain.value,.0001),ctx.currentTime);
+      s.gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.12);
+    }catch(e){}
+    setTimeout(()=>{
+      s.nodes.forEach(nd=>{try{if(nd.stop)nd.stop();}catch(e){} try{nd.disconnect();}catch(e){}});
+      try{s.gain.disconnect();}catch(e){}
+    },260);
+  }
+  if(audioEl){ try{audioEl.pause();audioEl.currentTime=0;}catch(e){} audioEl.onended=null; audioEl=null; }
+  document.querySelectorAll(".card.playing").forEach(c=>c.classList.remove("playing"));
+  document.getElementById("btnAll").textContent="连奏八音";
+}
+function setPlaying(index,srcLabel){
+  const it = INSTRUMENTS[index];
+  const card = grid.children[index];
+  if(card) card.classList.add("playing");
+  document.getElementById("infoTitle").textContent = it.material+" · 八音 · "+it.name;
+  document.getElementById("infoDesc").textContent = it.desc;
+  document.getElementById("infoSrc").textContent = "正在演奏 · "+(srcLabel||"Web Audio 实时合成")+" · 点击其他卡片可切换";
+}
+function playInstrument(index){
+  const it = INSTRUMENTS[index];
+  if(!it) return;
+  ensureAudio();
+  if(ctx.state==="suspended") ctx.resume();
+
+  if(AUDIO_SOURCES[it.id]){
+    stopAll();
+    setPlaying(index,"真实录音");
+    audioEl = new Audio(AUDIO_SOURCES[it.id]);
+    audioEl.volume = document.getElementById("vol").value/100;
+    audioEl.play().catch(()=>{});
+    audioEl.onended = ()=>{ stopAll(); };
+    return;
+  }
+  /* 先停旧会话再点亮卡片，否则高亮会被 stopAll 立刻清掉 */
+  const s = newSession();
+  setPlaying(index,"Web Audio 实时合成");
+  const t0 = ctx.currentTime + .07;
+  let t = t0;
+  it.melody.forEach(step=>{
+    VOICES[it.voice](s,s.gain,step.f,t,step.d,step.vel,step);
+    t += step.d + step.gap;
+  });
+  const total = (t-t0)*1000;
+  stopTimer = setTimeout(()=>{
+    stopAll();
+    document.getElementById("infoSrc").textContent = "演奏完毕 · 可再次点击卡片重听";
+  }, total+350);
+}
+function playAll(){
+  ensureAudio();
+  if(ctx.state==="suspended") ctx.resume();
+  stopAll();
+  document.getElementById("btnAll").textContent="连奏中…";
+  let i=0;
+  const step = ()=>{
+    if(i>=INSTRUMENTS.length){
+      document.getElementById("btnAll").textContent="连奏八音";
+      document.getElementById("infoSrc").textContent="八音连奏完毕 · 金石土革丝木匏竹";
+      return;
+    }
+    const it = INSTRUMENTS[i];
+    const s = newSession();
+    setPlaying(i,"八音连奏");
+    document.getElementById("btnAll").textContent="连奏中… ("+(i+1)+"/8)";
+    const t0 = ctx.currentTime+.06;
+    let t=t0;
+    it.melody.slice(0,2).forEach(step2=>{
+      VOICES[it.voice](s,s.gain,step2.f,t,step2.d,step2.vel*.9,step2);
+      t += step2.d + step2.gap*.4;
+    });
+    i++;
+    allTimer = setTimeout(step, Math.max(900,(t-t0)*1000+250));
+  };
+  step();
+}
+
+/* ---------- 默认文案 ---------- */
+const DEFAULT_INFO = {
+  title:"八音 · 金、石、土、革、丝、木、匏、竹",
+  desc:"中国最早按制作材料划分乐器的分类法，始于西周。点击任意一件乐器，聆听它的声音与故事。",
+  src:"音色：Web Audio 实时合成 · 支持接入真实录音"
+};
+function resetInfo(){
+  document.getElementById("infoTitle").textContent = DEFAULT_INFO.title;
+  document.getElementById("infoDesc").textContent = DEFAULT_INFO.desc;
+  document.getElementById("infoSrc").textContent = DEFAULT_INFO.src;
+}
+
+document.getElementById("btnStop").addEventListener("click",()=>{
+  stopAll();
+  resetInfo();
+  document.getElementById("infoSrc").textContent="已停止 · 音色：Web Audio 实时合成";
+});
+document.getElementById("btnAll").addEventListener("click",playAll);
+document.getElementById("vol").addEventListener("input",e=>{
+  if(!ctx) return;
+  master.gain.setTargetAtTime((e.target.value/100)*0.9,ctx.currentTime,.02);
+  if(audioEl) audioEl.volume=e.target.value/100;
+});
+
+/* ============================================================
+   听辨音色小游戏
+   ------------------------------------------------------------
+   三个难度共用一套题：每轮 10 题，从八件乐器里随机抽（一轮内八件
+   至少各出现一次）。出题时只放声音、不点亮卡片，避免泄题；答完
+   立刻给正误、正确乐器与一句小知识；结算页可回听错题。最高分存在
+   本机 localStorage，不上传。
+   ============================================================ */
+const MAT_HINT = {
+  金:"青铜铸造", 石:"玉石磨制", 土:"陶土烧制", 木:"木斗为腔",
+  丝:"蚕丝为弦", 竹:"竹管为体", 匏:"葫芦为斗", 革:"皮革蒙面"
+};
+const MAT_ORDER = ["金","石","土","木","丝","竹","匏","革"];
+const QUIZ_TOTAL = 10;
+const QUIZ_BEST_KEY = "bayin-quiz-best-v1";
+const QUIZ_MODES = {
+  easy:  {key:"easy",  name:"入门 · 四选一", note:"不限时，可以反复听",              pool:4, timed:false, limit:0,  replays:99, kind:"instrument"},
+  hard:  {key:"hard",  name:"进阶 · 八选一", note:"限时 12 秒，可重听 2 次",          pool:8, timed:true,  limit:12, replays:2,  kind:"instrument"},
+  master:{key:"master",name:"大师 · 听音辨类", note:"限时 10 秒，选出它所属的八音类别", pool:8, timed:true,  limit:10, replays:1,  kind:"material"}
+};
+const SPK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.4h3.3L12.2 5v14L7.3 14.6H4z"/><path d="M15.6 9.2a4.1 4.1 0 0 1 0 5.6"/><path d="M18.2 6.6a7.8 7.8 0 0 1 0 10.8"/></svg>';
+
+const quizEl = document.getElementById("quiz");
+const quizBody = document.getElementById("quizBody");
+let quizState = null, quizRAF = 0, quizOpen = false, questionToken = 0;
+
+function shuffle(list){
+  const r = list.slice();
+  for(let i=r.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    const t = r[i]; r[i] = r[j]; r[j] = t;
+  }
+  return r;
+}
+function readBest(key){
+  try{
+    const raw = localStorage.getItem(QUIZ_BEST_KEY);
+    const obj = raw ? JSON.parse(raw) : {};
+    return Number(obj[key]) || 0;
+  }catch(e){ return 0; }
+}
+function writeBest(key,score){
+  try{
+    const raw = localStorage.getItem(QUIZ_BEST_KEY);
+    const obj = raw ? JSON.parse(raw) : {};
+    obj[key] = score;
+    localStorage.setItem(QUIZ_BEST_KEY, JSON.stringify(obj));
+  }catch(e){}
+}
+
+/* 只出声、不点亮卡片：卡片高亮会直接泄露答案 */
+function playCue(inst){
+  ensureAudio();
+  if(ctx.state==="suspended") ctx.resume();
+  const s = newSession();                 /* 内部会停掉上一段 */
+  const t0 = ctx.currentTime + .06;
+  let t = t0, used = 0;
+  for(const step of inst.melody){
+    VOICES[inst.voice](s, s.gain, step.f, t, step.d, step.vel, step);
+    t += step.d + step.gap;
+    used++;
+    /* 至少两个音、总长过 1.2 秒，成一个小乐句；最多四个音，别拖太久 */
+    if((used >= 2 && t - t0 >= 1.2) || used >= 4) break;
+  }
+  cueTimer = setTimeout(()=>{ stopAll(); }, (t - t0) * 1000 + 600);
+}
+
+/* ---------- 开局 / 收局 ---------- */
+function openQuiz(){
+  quizOpen = true;
+  stopAll();                 /* 先把展厅正在演奏的声音停掉，免得和题目音频叠在一起 */
+  quizEl.hidden = false;
+  document.body.classList.add("quiz-open");
+  renderStart();
+  const first = quizBody.querySelector(".q-mode");
+  if(first) first.focus({preventScroll:true});
+}
+function closeQuiz(){
+  quizOpen = false;
+  quizState = null;
+  cancelAnimationFrame(quizRAF);
+  quizEl.hidden = true;
+  document.body.classList.remove("quiz-open");
+  stopAll();
+  resetInfo();
+}
+document.getElementById("btnQuiz").addEventListener("click",openQuiz);
+document.getElementById("quizClose").addEventListener("click",closeQuiz);
+
+/* ---------- 难度选择 ---------- */
+function renderStart(){
+  quizState = null;
+  questionToken++;
+  cancelAnimationFrame(quizRAF);
+  const cards = Object.keys(QUIZ_MODES).map(key=>{
+    const m = QUIZ_MODES[key];
+    const best = readBest(m.key);
+    return '<button class="q-mode" type="button" data-mode="'+m.key+'">'+
+      '<b>'+m.name+'</b>'+
+      '<span>'+m.note+'</span>'+
+      '<em>'+(best ? "最高分 "+best : "尚无记录")+'</em>'+
+    '</button>';
+  }).join("");
+  quizBody.innerHTML =
+    '<div class="q-stage">'+
+      '<p class="q-intro">听一段音色，认出它出自哪一件古乐器；<b>进阶</b>要在一轮音列里更快判断，<b>大师</b>则要直接说出它属于八音中的哪一类。</p>'+
+      '<div class="q-modes">'+cards+'</div>'+
+      '<p class="q-rule">每局 10 题，八件乐器随机出场。答对按<b>连对</b>与<b>剩余时间</b>加分，答错也能继续；结算时会列出错题，可以逐题回听。'+
+      '键盘：<b>1–8</b> 选项 · <b>空格</b> 重听 · <b>回车</b> 下一题 · <b>Esc</b> 退出。</p>'+
+    '</div>';
+  quizBody.querySelectorAll(".q-mode").forEach(btn=>{
+    btn.addEventListener("click",()=>startRound(btn.dataset.mode));
+  });
+}
+
+/* ---------- 出题 ---------- */
+function buildQuestions(mode){
+  const qs = [];
+  let deck = [];
+  for(let i=0;i<QUIZ_TOTAL;i++){
+    if(!deck.length) deck = shuffle(INSTRUMENTS);
+    const inst = deck.pop();
+    if(mode.kind === "material"){
+      qs.push({
+        inst,
+        prompt:"听一听，它属于八音中的哪一类？",
+        options:shuffle(MAT_ORDER.map(m=>({value:m,label:m,sub:MAT_HINT[m]}))),
+        correctValue:inst.material
+      });
+    }else{
+      const others = shuffle(INSTRUMENTS.filter(x=>x.id!==inst.id)).slice(0, mode.pool-1);
+      qs.push({
+        inst,
+        prompt:"听一听，这是哪一件乐器？",
+        options:shuffle([inst].concat(others)).map(x=>({value:x.id,label:x.name,sub:x.material+" · 八音"})),
+        correctValue:inst.id
+      });
+    }
+  }
+  return qs;
+}
+function startRound(modeKey){
+  const mode = QUIZ_MODES[modeKey];
+  if(!mode) return;
+  cancelAnimationFrame(quizRAF);
+  clearTimeout(cueTimer);
+  quizState = {
+    mode, qs:buildQuestions(mode), i:0, score:0, streak:0, best:0,
+    locked:false, left:mode.limit, replaysLeft:mode.replays, marks:[]
+  };
+  renderQuestion();
+}
+
+/* ---------- 题目 ---------- */
+function renderQuestion(){
+  const st = quizState;
+  if(!st) return;
+  const q = st.qs[st.i], mode = st.mode;
+  st.locked = false;
+  st.replaysLeft = mode.replays;
+
+  const opts = q.options.map(o=>
+    '<button class="q-opt" type="button" data-value="'+o.value+'">'+
+      '<em>'+o.label+'</em><small>'+o.sub+'</small>'+
+    '</button>').join("");
+
+  quizBody.innerHTML =
+    '<div class="q-stage">'+
+    '<div class="q-top">'+
+      '<span>第 <b>'+(st.i+1)+'</b> / '+QUIZ_TOTAL+' 题</span>'+
+      '<span>得分 <b id="qScore">'+st.score+'</b></span>'+
+      '<span>连对 <b id="qStreak">'+st.streak+'</b></span>'+
+      '<span class="grow"></span>'+
+      '<span class="q-clock" id="qClock">'+(mode.timed ? mode.limit.toFixed(1)+"s" : "不限时")+'</span>'+
+    '</div>'+
+    (mode.timed ? '<div class="q-timer"><i id="qBar"></i></div>' : '')+
+    '<p class="q-prompt">'+q.prompt+'</p>'+
+    '<div class="q-listen">'+
+      '<button class="q-play" id="qPlay" type="button" aria-label="播放音色">'+SPK_SVG+'</button>'+
+      '<span class="q-listen-hint" id="qHint">'+
+        (mode.replays >= 9 ? "点击可以反复听" : "还可重听 "+mode.replays+" 次")+
+      '</span>'+
+    '</div>'+
+    '<div class="q-options">'+opts+'</div>'+
+    '<p class="q-foot"><span>'+mode.name+'</span><span>按 '+(q.options.length===4?"1–4":"1–8")+' 选择 · 空格重听</span></p>'+
+    '<div class="q-feedback" id="qFeedback" aria-live="polite"></div>'+
+    '</div>';
+
+  quizBody.querySelectorAll(".q-opt").forEach(btn=>{
+    btn.addEventListener("click",()=>quizAnswer(btn.dataset.value));
+  });
+  document.getElementById("qPlay").addEventListener("click",replayCue);
+
+  /* 自动放一遍（不计入重听次数）；用令牌防止上一题的回调串到下一题 */
+  const token = ++questionToken;
+  setTimeout(()=>{
+    if(token === questionToken && quizState && !quizState.locked) playCueNow();
+  },260);
+  if(mode.timed) startQuizTimer(mode.limit);
+  quizEl.querySelector(".quiz-panel").scrollTop = 0;
+}
+
+function playCueNow(){
+  const st = quizState;
+  if(!st) return;
+  const btn = document.getElementById("qPlay");
+  if(btn){
+    btn.classList.add("sounding");
+    setTimeout(()=>btn.classList.remove("sounding"),1500);
+  }
+  playCue(st.qs[st.i].inst);
+}
+function replayCue(){
+  const st = quizState;
+  if(!st || st.locked) return;
+  if(st.mode.replays < 9){
+    const hint = document.getElementById("qHint");
+    if(st.replaysLeft <= 0){
+      if(hint) hint.textContent = "本段已不能重听";
+      return;
+    }
+    st.replaysLeft--;
+    if(hint) hint.textContent = st.replaysLeft > 0
+      ? "还可重听 "+st.replaysLeft+" 次"
+      : "已用完重听次数";
+  }
+  playCueNow();
+}
+
+function startQuizTimer(limit){
+  cancelAnimationFrame(quizRAF);
+  const t0 = performance.now();
+  const bar = document.getElementById("qBar");
+  const clock = document.getElementById("qClock");
+  const track = quizBody.querySelector(".q-timer");
+  const tick = ()=>{
+    const st = quizState;
+    if(!st || st.locked) return;
+    const left = Math.max(0, limit - (performance.now()-t0)/1000);
+    st.left = left;
+    if(bar) bar.style.width = (left/limit*100).toFixed(2)+"%";
+    if(clock) clock.textContent = left.toFixed(1)+"s";
+    if(track && left <= limit*.34) track.classList.add("warn");
+    if(left <= 0){ quizAnswer(null); return; }
+    quizRAF = requestAnimationFrame(tick);
+  };
+  quizRAF = requestAnimationFrame(tick);
+}
+
+/* ---------- 作答 ---------- */
+function quizAnswer(value){
+  const st = quizState;
+  if(!st || st.locked) return;
+  const q = st.qs[st.i], mode = st.mode;
+  st.locked = true;
+  cancelAnimationFrame(quizRAF);
+
+  const ok = value === q.correctValue;
+  const timedOut = (value === null);
+  const timeBonus = (mode.timed && ok) ? Math.round(Math.max(0, st.left)) : 0;
+  const streakBonus = Math.min(st.streak,5) * 2;
+  const gain = ok ? 10 + timeBonus + streakBonus : 0;
+
+  st.score += gain;
+  if(ok){ st.streak++; st.best = Math.max(st.best, st.streak); }
+  else { st.streak = 0; }
+
+  const rightOpt = q.options.filter(o=>o.value===q.correctValue)[0];
+  const chosenOpt = value === null ? null : q.options.filter(o=>o.value===value)[0];
+  st.marks.push({
+    idx:st.i, inst:q.inst, ok, timedOut,
+    chosenLabel:chosenOpt ? chosenOpt.label : "",
+    rightLabel:rightOpt ? rightOpt.label : q.correctValue
+  });
+
+  quizBody.querySelectorAll(".q-opt").forEach(btn=>{
+    const v = btn.dataset.value;
+    if(v === q.correctValue) btn.classList.add("ok");
+    else if(v === value) btn.classList.add("bad");
+    else btn.classList.add("dim");
+    btn.disabled = true;
+  });
+  const scoreEl = document.getElementById("qScore");
+  const streakEl = document.getElementById("qStreak");
+  if(scoreEl) scoreEl.textContent = st.score;
+  if(streakEl) streakEl.textContent = st.streak;
+
+  const fb = document.getElementById("qFeedback");
+  fb.className = "q-feedback show " + (ok ? "ok" : "bad");
+  const head = ok
+    ? '<span class="fb-mark">✓</span><span>答对了 · '+q.inst.material+' · '+q.inst.name+'</span>'+
+      '<span class="fb-score">+'+gain+(timeBonus?("（含时间 "+timeBonus+"）"):"")+'</span>'
+    : '<span class="fb-mark">✕</span><span>'+(timedOut?"时间到":"答错了")+' · 正确答案是 '+q.inst.material+' · '+q.inst.name+'</span>';
+  fb.innerHTML =
+    '<div class="fb-line">'+head+'</div>'+
+    '<div class="fb-desc">'+q.inst.desc+'</div>'+
+    '<div class="fb-act"><button class="btn primary" id="qNext" type="button">'+
+      (st.i+1 >= QUIZ_TOTAL ? "查看成绩" : "下一题")+
+    '</button></div>';
+  document.getElementById("qNext").addEventListener("click",nextQuestion);
+}
+function nextQuestion(){
+  const st = quizState;
+  if(!st) return;
+  if(st.i+1 >= QUIZ_TOTAL){ renderResult(); return; }
+  st.i++;
+  renderQuestion();
+}
+
+/* ---------- 结算 ---------- */
+function renderResult(){
+  const st = quizState;
+  if(!st) return;
+  cancelAnimationFrame(quizRAF);
+  clearTimeout(cueTimer);
+
+  const correct = st.marks.filter(m=>m.ok).length;
+  const rank = correct >= 10 ? "八音通儒"
+             : correct >= 8  ? "知音"
+             : correct >= 6  ? "初识宫商"
+             : "再听一遍";
+  const prev = readBest(st.mode.key);
+  const isBest = st.score > prev;
+  if(isBest) writeBest(st.mode.key, st.score);
+
+  const wrongs = st.marks.filter(m=>!m.ok);
+  const wrongHtml = wrongs.length
+    ? '<div class="q-wrong"><h3>错题回听（'+wrongs.length+' 题）</h3>'+
+        wrongs.map(m=>
+          '<div class="q-wrong-item">'+
+            '<button class="w-play" type="button" data-inst="'+m.inst.id+'" aria-label="重听 '+m.inst.name+'">▶</button>'+
+            '<span>第 '+(m.idx+1)+' 题</span>'+
+            '<span class="w-arrow">·</span>'+
+            '<span>你选 '+(m.timedOut ? "—（超时未答）" : m.chosenLabel)+'</span>'+
+            '<span class="w-arrow">→</span>'+
+            '<span class="w-right">'+m.inst.material+' · '+m.inst.name+'</span>'+
+          '</div>').join("")+
+      '</div>'
+    : '<p class="q-sub" style="margin-top:18px;color:#8ff2dd">十题全对，八音皆能辨。</p>';
+
+  quizBody.innerHTML =
+    '<div class="q-result">'+
+      '<div class="q-rank">'+rank+'</div>'+
+      '<div class="q-sub">'+(isBest ? '<span class="new-best">新纪录 · </span>' : '')+
+        st.mode.name+' · 最高分 '+Math.max(prev, st.score)+'</div>'+
+      '<div class="q-stats">'+
+        '<div class="q-stat"><b>'+st.score+'</b><span>本局得分</span></div>'+
+        '<div class="q-stat"><b>'+correct+' / '+QUIZ_TOTAL+'</b><span>答对题数</span></div>'+
+        '<div class="q-stat"><b>'+st.best+'</b><span>最高连对</span></div>'+
+      '</div>'+
+      wrongHtml+
+      '<div class="q-actions">'+
+        '<button class="btn primary" id="qAgain" type="button">再来一局</button>'+
+        '<button class="btn" id="qBack" type="button">换个难度</button>'+
+        '<button class="btn" id="qExit" type="button">返回展厅</button>'+
+      '</div>'+
+    '</div>';
+
+  document.getElementById("qAgain").addEventListener("click",()=>startRound(st.mode.key));
+  document.getElementById("qBack").addEventListener("click",renderStart);
+  document.getElementById("qExit").addEventListener("click",closeQuiz);
+  quizBody.querySelectorAll(".w-play").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const inst = INSTRUMENTS.filter(x=>x.id===btn.dataset.inst)[0];
+      if(inst) playCue(inst);
+    });
+  });
+  quizEl.querySelector(".quiz-panel").scrollTop = 0;
+}
+
+/* ---------- 键盘 ---------- */
+document.addEventListener("keydown",e=>{
+  if(!quizOpen) return;
+  if(e.key === "Escape"){ e.preventDefault(); closeQuiz(); return; }
+  if(!quizState) return;
+  const st = quizState;
+  if(e.key === " "){
+    e.preventDefault();
+    if(!st.locked) replayCue();
+    return;
+  }
+  if(e.key === "Enter"){
+    const nx = document.getElementById("qNext");
+    if(nx){ e.preventDefault(); nx.click(); }
+    return;
+  }
+  if(e.key >= "1" && e.key <= "8" && !st.locked){
+    const opts = quizBody.querySelectorAll(".q-opt");
+    const idx = parseInt(e.key,10) - 1;
+    if(opts[idx]){ e.preventDefault(); quizAnswer(opts[idx].dataset.value); }
+  }
+});
+
+document.addEventListener("keydown",e=>{
+  if(quizOpen) return;
+  if(e.key>="1" && e.key<="8"){ playInstrument(parseInt(e.key,10)-1); }
+  else if(e.key===" "||e.key==="Escape"){ e.preventDefault(); document.getElementById("btnStop").click(); }
+});
+</script>
+<a id="huaxiaBack" href="../" style="position:fixed;left:12px;bottom:12px;z-index:2147483647;display:inline-block;padding:7px 13px;border-radius:20px;background:rgba(28,35,40,.72);color:#fffdf7;font:12px/1.4 'Microsoft YaHei','PingFang SC',sans-serif;text-decoration:none;letter-spacing:.04em;box-shadow:0 2px 10px rgba(0,0,0,.22);-webkit-tap-highlight-color:transparent">← 听见华夏</a>
+<script>(function(){var c=new URLSearchParams(location.search).get('sharecode');if(c){document.getElementById('huaxiaBack').href='../?sharecode='+encodeURIComponent(c);}})();</script>
+</body>
+</html>

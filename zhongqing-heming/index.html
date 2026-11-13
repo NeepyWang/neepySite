@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#08110f">
+  <meta name="description" content="钟磬和鸣：在线敲击曾侯乙编钟与编磬，一键切换，聆听金石之声。">
+  <title>钟磬和鸣 · 曾侯乙钟磬模拟演奏</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-instrument="bell">
+  <main class="instrument" aria-label="曾侯乙钟磬在线演奏">
+    <header class="toolbar">
+      <div class="brand" aria-label="钟磬和鸣">
+        <span class="brand-seal" id="brandSeal">钟</span>
+        <span><b>钟磬和鸣</b><small id="brandSub">曾侯乙编钟 · 模拟演奏</small></span>
+      </div>
+
+      <div class="instrument-toggle" id="instrumentToggle" role="group" aria-label="选择乐器">
+        <button type="button" class="active" data-instrument="bell" aria-pressed="true">编钟</button>
+        <button type="button" data-instrument="qing" aria-pressed="false">编磬</button>
+      </div>
+
+      <div class="tone-readout" id="toneReadout" aria-live="polite">
+        <span class="tone-id"></span>
+        <strong></strong>
+        <span class="tone-name"></span>
+      </div>
+    </header>
+
+    <section class="stage" id="stage" aria-label="可敲击的曾侯乙钟磬">
+      <img id="bellImage" class="stage-image" src="./bell.webp" alt="曾侯乙编钟正面，点击各枚钟体可演奏">
+      <img id="qingImage" class="stage-image" src="./qing.png" alt="曾侯乙编磬正面，点击各块磬体可演奏" hidden>
+      <div class="mode-toggle" id="modeToggle" role="group" aria-label="选择敲击部位">
+        <button type="button" class="active" data-mode="zheng" aria-pressed="true">正鼓音</button>
+        <button type="button" data-mode="side" aria-pressed="false">侧鼓音</button>
+      </div>
+      <div class="stage-hint" id="stageHint">点击钟体开始演奏</div>
+      <p class="stage-notice" id="stageNotice" role="status"></p>
+    </section>
+
+    <section class="keyboard-panel" aria-label="音高指示键盘">
+      <div class="keyboard-label">
+        <span><i class="status-dot"></i>音高映射</span>
+      </div>
+      <div class="piano" id="piano" role="group" aria-label="钢琴键盘，点击琴键可演奏对应钟磬"></div>
+    </section>
+  </main>
+
+  <script src="./bell-map.js"></script>
+  <script src="./qing-map.js"></script>
+  <script src="./app.js"></script>
+<a id="huaxiaBack" href="../" style="position:fixed;left:12px;bottom:12px;z-index:2147483647;display:inline-block;padding:7px 13px;border-radius:20px;background:rgba(28,35,40,.72);color:#fffdf7;font:12px/1.4 'Microsoft YaHei','PingFang SC',sans-serif;text-decoration:none;letter-spacing:.04em;box-shadow:0 2px 10px rgba(0,0,0,.22);-webkit-tap-highlight-color:transparent">← 听见华夏</a>
+<script>(function(){var c=new URLSearchParams(location.search).get('sharecode');if(c){document.getElementById('huaxiaBack').href='../?sharecode='+encodeURIComponent(c);}})();</script>
+</body>
+</html>

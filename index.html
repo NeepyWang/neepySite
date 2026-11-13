@@ -1,23 +1,114 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#eef5f3">
-<title>Neepy 的小天地</title>
+<title>听见华夏——中国古代民族乐器AI综合体验馆</title>
 <style>
-:root{--ink:#263c3b;--muted:#697f7c;--paper:#eef5f3;--white:#fffefa;--mint:#c7e8dc;--yellow:#ffdd85;--pink:#f4c5c5;--blue:#c4def1;--line:#b8d0c8;--shadow:0 14px 34px #3e696015}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-rounded,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;line-height:1.6}button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #548c85;outline-offset:3px}a{color:inherit}.wrap{max-width:1120px;margin:auto;padding:0 28px}header{height:82px;display:flex;align-items:center;justify-content:space-between}.logo{font-size:19px;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:10px}.flower{font-size:26px;color:#ec9f9b}.nav{display:flex;align-items:center;gap:26px;font-size:14px;color:#4d6762}.nav a{text-decoration:none}.nav a:hover{text-decoration:underline}.hero{display:grid;grid-template-columns:1.04fr .96fr;align-items:center;min-height:380px;gap:30px;padding:22px 0 38px}.tag{display:inline-flex;gap:8px;align-items:center;border:1px solid #b3d0c4;border-radius:99px;padding:5px 12px;font-size:13px;color:#4c756a;background:#f9fffc}.tag:before{content:"";width:7px;height:7px;background:#76b99e;border-radius:50%}h1{font-size:clamp(39px,5.2vw,67px);line-height:1.19;letter-spacing:-.055em;margin:20px 0;font-weight:800}h1 span{color:#6caaa0}.intro{font-size:16px;color:#637c76;max-width:410px;margin:0 0 24px}.button{display:inline-flex;align-items:center;justify-content:center;border:0;background:#385f59;color:white;border-radius:12px;padding:12px 20px;font-weight:700;text-decoration:none;transition:transform .2s,background .2s}.button:hover{background:#294b46;transform:translateY(-2px)}.hero-art{height:325px;position:relative;display:grid;place-items:center}.blob{position:absolute;width:310px;height:270px;background:#d1ece2;border-radius:47% 53% 43% 57% / 52% 45% 55% 48%;transform:rotate(-8deg)}.scene{position:relative;width:330px;height:280px}.sun{position:absolute;top:15px;right:37px;width:60px;height:60px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 10px #ffdd8540}.note{position:absolute;top:30px;left:34px;transform:rotate(-11deg);background:#fffdf2;padding:14px 15px;box-shadow:var(--shadow);font-size:12px;color:#718681;border-radius:5px}.note strong{display:block;color:#496d62;font-size:15px}.pot{position:absolute;bottom:20px;left:84px;width:170px;height:135px;background:#e6a7a1;border:4px solid #476e63;border-radius:15px 15px 60px 60px;transform:rotate(2deg)}.pot:before{content:"";position:absolute;left:-11px;right:-11px;top:-15px;height:29px;background:#f3bbb2;border:4px solid #476e63;border-radius:12px}.eyes{position:absolute;left:51px;top:49px;width:9px;height:12px;border-radius:50%;background:#476e63;box-shadow:49px 0 #476e63}.smile{position:absolute;top:69px;left:69px;width:19px;height:10px;border-bottom:3px solid #476e63;border-radius:50%}.leaf{position:absolute;background:#80bfa8;border:4px solid #476e63;border-radius:80% 8% 80% 8%;width:83px;height:51px;top:76px;left:95px;transform:rotate(28deg)}.leaf.two{left:163px;top:65px;transform:rotate(136deg);background:#a4d5a8}.stem{position:absolute;left:165px;top:90px;height:70px;width:4px;background:#476e63;transform:rotate(-5deg)}.spark{position:absolute;color:#dfa85b;font-size:27px}.s1{left:12px;bottom:45px}.s2{right:12px;top:108px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:15px 0 16px}.section-head h2{font-size:26px;letter-spacing:-.03em;margin:0}.section-head p{margin:2px 0 0;color:var(--muted);font-size:14px}.workspace{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:start}.panel{background:var(--white);border:1px solid #dbe9e3;border-radius:22px;padding:26px;box-shadow:var(--shadow);min-height:340px}.panel-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.panel h3{margin:0;font-size:20px}.panel .desc{color:var(--muted);font-size:13px;margin:4px 0 19px}.icon{font-size:25px;line-height:1;background:#e5f3ea;width:43px;height:43px;display:grid;place-items:center;border-radius:14px}.icon.pink{background:#f9e2db}.moods{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}.mood{border:1px solid #e0ebe6;border-radius:11px;background:#f8fbf8;padding:8px 11px;font-size:13px}.mood[aria-pressed="true"]{border-color:#6da997;background:#dff2e8}.field{display:block;width:100%;border:1px solid #dbe8e1;background:#fafdfa;border-radius:12px;padding:11px 13px;outline:none}.field:focus{border-color:#83b9a8}textarea.field{resize:vertical;min-height:86px}.form-row{display:flex;gap:8px;margin-top:10px}.form-row .field{min-width:0}.small-button{border:0;background:#3e6a60;color:white;font-weight:700;border-radius:10px;padding:10px 15px;white-space:nowrap}.small-button:hover{background:#2e5149}.caption{font-size:12px;color:#7c918a;margin:11px 0 0}.list{list-style:none;padding:0;margin:15px 0 0}.list li{border-top:1px solid #edf2ee;padding:11px 0;display:flex;gap:10px;justify-content:space-between;align-items:start}.entry{min-width:0;overflow-wrap:anywhere;font-size:14px}.entry small{display:block;color:#8a9a94;font-size:11px}.entry a{color:#3d7368;text-underline-offset:3px}.remove{border:0;background:transparent;color:#94a6a0;padding:2px 5px;font-size:18px;line-height:1}.empty{color:#91a19b;font-size:13px;margin:18px 0 3px}.tip{margin:27px 0 45px;background:#dceee5;border-radius:16px;padding:15px 20px;display:flex;align-items:center;gap:12px;color:#54776a;font-size:13px}.tip span{font-size:20px}footer{border-top:1px solid #d5e6df;padding:24px 0 32px;color:#91a29c;font-size:12px;display:flex;justify-content:space-between}.status{min-height:1.4em;color:#477466;font-size:12px;margin:7px 0 0}@media(max-width:700px){.wrap{padding:0 19px}header{height:68px}.nav{gap:15px;font-size:13px}.hero{grid-template-columns:1fr;gap:0;padding-top:22px}.hero-art{height:240px;order:-1}.scene{transform:scale(.78)}.blob{transform:scale(.8) rotate(-8deg)}h1{margin:15px 0;font-size:42px}.intro{margin-bottom:18px}.workspace{grid-template-columns:1fr}.panel{min-height:0;padding:22px}.section-head{margin-top:10px}.section-head h2{font-size:23px}footer{gap:15px;flex-wrap:wrap}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+  :root{
+    --bg:#f7f4ec; --card:#fffdf7; --ink:#1d2328; --muted:#6b6255;
+    --line:#ded3bd; --gold:#a87b32; --cyan:#2b6f78; --clay:#9b4f36;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #fffdf6 0%, rgba(255,253,246,0) 70%),
+      var(--bg);
+    font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",Arial,sans-serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:48px 20px 36px;
+  }
+  .head{text-align:center; margin-bottom:38px}
+  .eyebrow{font-size:12px; letter-spacing:.32em; color:var(--gold); margin-bottom:14px}
+  h1{font-family:"SimSun","Songti SC",serif; font-size:clamp(28px,4.2vw,40px); font-weight:600; margin:0 0 12px; letter-spacing:.06em}
+  .sub{font-size:14px; color:var(--muted); margin:0; line-height:1.8}
+  .grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; width:min(1080px,100%)}
+  .card{
+    display:block; text-decoration:none; color:inherit; background:var(--card);
+    border:1px solid var(--line); border-radius:14px; padding:26px 22px 22px;
+    box-shadow:0 2px 14px rgba(60,48,24,.05);
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    position:relative; overflow:hidden;
+  }
+  .card:before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--gold)}
+  .card.qin:before{background:var(--cyan)}
+  .card.heming:before{background:var(--clay)}
+  .card:hover{transform:translateY(-4px); box-shadow:0 10px 28px rgba(60,48,24,.12); border-color:var(--gold)}
+  .card.qin:hover{border-color:var(--cyan)}
+  .card.heming:hover{border-color:var(--clay)}
+  .tag{display:inline-block; font-size:11px; letter-spacing:.14em; color:var(--gold); border:1px solid currentColor; border-radius:20px; padding:3px 10px; margin-bottom:16px}
+  .qin .tag{color:var(--cyan)}
+  .heming .tag{color:var(--clay)}
+  h2{font-family:"SimSun","Songti SC",serif; font-size:21px; font-weight:600; margin:0 0 12px}
+  .desc{font-size:13px; color:var(--muted); line-height:1.9; margin:0 0 22px; min-height:100px}
+  .go{display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line); padding-top:16px; font-size:13px; color:var(--gold); letter-spacing:.06em}
+  .qin .go{color:var(--cyan)}
+  .heming .go{color:var(--clay)}
+  .path{font-size:11px; color:#9a9081; letter-spacing:.02em; margin-top:14px}
+  .foot{margin-top:34px; font-size:12px; color:#948a7a; text-align:center; line-height:1.9}
+  @media(max-width:960px){
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr)); max-width:720px}
+    .desc{min-height:78px}
+  }
+  @media(max-width:680px){
+    .grid{grid-template-columns:1fr; max-width:420px}
+    .desc{min-height:0}
+    body{justify-content:flex-start; padding-top:40px}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-<header><div class="logo"><span class="flower" aria-hidden="true">✿</span> Neepy 的小天地</div><nav class="nav" aria-label="页面导航"><a href="#journal">写心情</a><a href="#favorites">收集喜欢</a></nav></header>
-<main><section class="hero"><div><div class="tag">这是属于你的一小块地方</div><h1>把日子里的<br><span>喜欢</span>，收起来。</h1><p class="intro">写下此刻的心情，收藏偶然发现的美好。<br>不需要特别的理由，喜欢就值得留下。</p><a class="button" href="#journal">来坐一会儿&nbsp; ↓</a></div><div class="hero-art" aria-hidden="true"><div class="blob"></div><div class="scene"><div class="sun"></div><div class="note">给今天留一点<strong>小小的好心情 ☺</strong></div><div class="stem"></div><div class="leaf"></div><div class="leaf two"></div><div class="pot"><div class="eyes"></div><div class="smile"></div></div><div class="spark s1">✳</div><div class="spark s2">✦</div></div></div></section>
-<div class="section-head"><div><h2>今天的小角落</h2><p>想到什么就记下来，慢慢攒满它。</p></div></div>
-<div class="workspace"><section class="panel" id="journal"><div class="panel-top"><div><h3>心情便签</h3><p class="desc">现在的你，是什么心情？</p></div><span class="icon" aria-hidden="true">✎</span></div><div class="moods" aria-label="选择心情"><button class="mood" type="button" data-mood="开心" aria-pressed="false">☀️ 开心</button><button class="mood" type="button" data-mood="平静" aria-pressed="false">🌿 平静</button><button class="mood" type="button" data-mood="有点累" aria-pressed="false">☁️ 有点累</button><button class="mood" type="button" data-mood="期待" aria-pressed="false">✨ 期待</button></div><form id="mood-form"><label for="mood-text" class="caption">写一句话（选填）</label><textarea id="mood-text" class="field" maxlength="300" placeholder="今天想记住的一件小事……"></textarea><div class="form-row"><button class="small-button" type="submit">收好这份心情</button></div></form><p class="status" id="mood-status" role="status"></p><ul class="list" id="mood-list"></ul><p class="empty" id="mood-empty">还没有便签，从今天的心情开始吧。</p></section>
-<section class="panel" id="favorites"><div class="panel-top"><div><h3>喜欢收藏夹</h3><p class="desc">一首歌、一篇文章，或任何喜欢的东西。</p></div><span class="icon pink" aria-hidden="true">♡</span></div><form id="favorite-form"><label for="favorite-name" class="caption">名称</label><input class="field" id="favorite-name" maxlength="80" placeholder="给喜欢的东西起个名字" required><label for="favorite-url" class="caption">链接（选填）</label><input class="field" id="favorite-url" type="url" placeholder="https://..." maxlength="1000"><div class="form-row"><button class="small-button" type="submit">放进收藏夹</button></div></form><p class="status" id="favorite-status" role="status"></p><ul class="list" id="favorite-list"></ul><p class="empty" id="favorite-empty">收藏夹还是空的，遇到喜欢的就放进来。</p></section></div>
-<div class="tip"><span aria-hidden="true">✳</span><div>心情和收藏只保存在当前设备的浏览器中，换设备或清除浏览器数据后可能无法找回。</div></div></main><footer><span>Neepy 的小天地</span><span>愿你每天都发现一点喜欢的事。</span></footer></div>
+  <div class="head">
+    <div class="eyebrow">听 见 华 夏</div>
+    <h1>交互网页入口</h1>
+    <p class="sub">三个在线交互页，点选进入；打开后无需安装、无需登录。</p>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="bayin-experience/">
+      <span class="tag">八音 · 音色</span>
+      <h2>八音分类体验馆</h2>
+      <p class="desc">金、石、土、木／丝、竹、匏、革八件乐器，点击聆听音色、连奏八音，附「听辨音色」小游戏三档难度。</p>
+      <div class="go"><span>进入体验</span><span>→</span></div>
+      <div class="path">bayin-experience ／ 八音分类体验馆</div>
+    </a>
+
+    <a class="card qin" href="jiuxiao-huanpei/">
+      <span class="tag">古琴 · 3D</span>
+      <h2>九霄环佩古琴3D</h2>
+      <p class="desc">唐代「九霄环佩」琴三维细部赏析，可拖动旋转、滚轮缩放，六种视角与二十处细部索引逐一点选。</p>
+      <div class="go"><span>进入观赏</span><span>→</span></div>
+      <div class="path">jiuxiao-huanpei ／ 九霄环佩古琴3D</div>
+    </a>
+
+    <a class="card heming" href="zhongqing-heming/">
+      <span class="tag">金石 · 演奏</span>
+      <h2>钟磬和鸣</h2>
+      <p class="desc">曾侯乙编钟、编磬模拟演奏：一键切换乐器，点击钟体或琴键发声，可辨正鼓音、侧鼓音与音高映射。</p>
+      <div class="go"><span>进入演奏</span><span>→</span></div>
+      <div class="path">zhongqing-heming ／ 钟磬和鸣</div>
+    </a>
+  </div>
+
+  <div class="foot">
+    三个交互页与素材都在本站内，点选即可打开，不依赖其他网址。<br>
+    分享时请整条复制地址（含 ?sharecode= 后面的参数）。
+  </div>
+
 <script>
-(()=>{'use strict';const key='neepy-pocket-v1';const byId=id=>document.getElementById(id);let state={moods:[],favorites:[]},chosen='';let storageOK=true;try{const saved=localStorage.getItem(key);if(saved){const parsed=JSON.parse(saved);if(Array.isArray(parsed.moods)&&Array.isArray(parsed.favorites))state=parsed}}catch(e){storageOK=false}function save(){try{localStorage.setItem(key,JSON.stringify(state));storageOK=true;return true}catch(e){storageOK=false;return false}}function message(id,ok){byId(id).textContent=ok?'已保存到这台设备。':'浏览器无法保存数据，本次内容可能在关闭页面后丢失。'}function render(){for(const [type,empty,list] of [['moods','mood-empty','mood-list'],['favorites','favorite-empty','favorite-list']]){const el=byId(list);el.replaceChildren();byId(empty).hidden=state[type].length>0;state[type].forEach(item=>{const li=document.createElement('li'),entry=document.createElement('div'),meta=document.createElement('small'),remove=document.createElement('button');entry.className='entry';if(type==='moods'){const title=document.createElement('div');title.textContent=(item.mood?item.mood+' · ':'')+(item.text||'今天想留住这个心情');entry.append(title)}else if(item.url){const a=document.createElement('a');try{const url=new URL(item.url);if(!['https:','http:'].includes(url.protocol))throw Error();a.href=url.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=item.name;entry.append(a)}catch(e){entry.textContent=item.name}}else entry.textContent=item.name;meta.textContent=item.date;entry.append(meta);remove.type='button';remove.className='remove';remove.textContent='×';remove.setAttribute('aria-label','删除'+(type==='moods'?'这条心情':item.name));remove.addEventListener('click',()=>{state[type]=state[type].filter(x=>x.id!==item.id);const ok=save();render();message(type==='moods'?'mood-status':'favorite-status',ok)});li.append(entry,remove);el.append(li)})}}const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,9);const date=()=>new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'long',day:'numeric'}).format(new Date());document.querySelectorAll('.mood').forEach(b=>b.addEventListener('click',()=>{chosen=b.dataset.mood;document.querySelectorAll('.mood').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}));byId('mood-form').addEventListener('submit',e=>{e.preventDefault();const text=byId('mood-text').value.trim();if(!chosen&&!text){byId('mood-status').textContent='选一个心情，或写下一句话吧。';return}state.moods.unshift({id:id(),mood:chosen,text,date:date()});const ok=save();byId('mood-text').value='';chosen='';document.querySelectorAll('.mood').forEach(x=>x.setAttribute('aria-pressed','false'));render();message('mood-status',ok)});byId('favorite-form').addEventListener('submit',e=>{e.preventDefault();const name=byId('favorite-name').value.trim(),url=byId('favorite-url').value.trim();if(!name){byId('favorite-status').textContent='请先写一个名称。';return}if(url){try{if(!['http:','https:'].includes(new URL(url).protocol))throw Error()}catch(err){byId('favorite-status').textContent='请输入以 http:// 或 https:// 开头的链接。';return}}state.favorites.unshift({id:id(),name,url,date:date()});const ok=save();e.target.reset();render();message('favorite-status',ok)});render();if(!storageOK)byId('mood-status').textContent='浏览器无法读取本地数据，保存功能可能不可用。'})();
+/* 平台访问参数随站内导航透传，保证每个子页与子资源都能正常打开 */
+(function(){
+  var code = new URLSearchParams(location.search).get('sharecode');
+  if(!code) return;
+  var cards = document.querySelectorAll('a.card');
+  for(var i=0;i<cards.length;i++){
+    var a = cards[i];
+    var u = new URL(a.getAttribute('href'), location.href);
+    u.searchParams.set('sharecode', code);
+    a.setAttribute('href', u.pathname + u.search + u.hash);
+  }
+})();
 </script>
-</body></html>
+</body>
+</html>
