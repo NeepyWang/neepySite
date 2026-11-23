@@ -215,6 +215,13 @@ body.immersed #exitImmersed{display:block}
   footer span:nth-child(2){display:none}
 }
 </style>
+<style id="neepy-brand-fix">
+  header{padding-left:160px!important}
+  @media(max-width:620px){
+    header{flex:0 0 100px!important;padding:38px 12px 6px!important;padding-left:12px!important}
+    .neepy-brand{width:88px!important;left:10px!important;top:6px!important}
+  }
+</style>
 </head>
 <body>
 
@@ -1288,9 +1295,7 @@ setTimeout(function(){
 setTimeout(function(){ toast("拖动古琴以旋转，滚轮缩放；点选右侧细部索引可放大观察"); },1400);
 })();
 </script>
-<a id="huaxiaBack" href="../" style="position:fixed;left:12px;bottom:12px;z-index:2147483647;display:inline-block;padding:7px 13px;border-radius:20px;background:rgba(28,35,40,.72);color:#fffdf7;font:12px/1.4 'Microsoft YaHei','PingFang SC',sans-serif;text-decoration:none;letter-spacing:.04em;box-shadow:0 2px 10px rgba(0,0,0,.22);-webkit-tap-highlight-color:transparent">← 听见华夏</a>
-  <div style="position:fixed;right:12px;bottom:12px;z-index:2147483647;opacity:.9;line-height:0;pointer-events:none">
-    <img src="../logo-d-neepy-oriental.svg" alt="Neepy" style="display:block;width:clamp(120px,26vw,132px);height:auto;border-radius:7px;box-shadow:0 2px 10px rgba(0,0,0,.14)">
-  </div>
+<a id="huaxiaBack" href="../index.html" style="position:fixed;left:12px;bottom:12px;z-index:2147483647;display:inline-block;padding:7px 13px;border-radius:20px;background:rgba(28,35,40,.72);color:#fffdf7;font:12px/1.4 'Microsoft YaHei','PingFang SC',sans-serif;text-decoration:none;letter-spacing:.04em;box-shadow:0 2px 10px rgba(0,0,0,.22);-webkit-tap-highlight-color:transparent">← 听见华夏</a>
+  <img class="neepy-brand" src="../logo-neepy-transparent.svg" alt="Neepy" style="position:fixed;left:12px;top:12px;z-index:2147483647;display:block;width:clamp(104px,15vw,140px);height:auto;margin:0;padding:0;border:0;border-radius:0;box-shadow:none;line-height:0;pointer-events:none">
 </body>
 </html>

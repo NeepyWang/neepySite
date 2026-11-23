@@ -10,18 +10,18 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <style>
   :root{
-    --bg:#f7f4ec; --card:#fffdf7; --ink:#1d2328; --muted:#6b6255;
+    --bg:#F6EDDB; --card:#FCF7EB; --ink:#1d2328; --muted:#6b6255;
     --line:#ded3bd; --gold:#a87b32; --cyan:#2b6f78; --clay:#9b4f36;
   }
   *{box-sizing:border-box}
   body{
     margin:0; min-height:100vh; color:var(--ink);
-    background:
-      radial-gradient(1200px 600px at 50% -10%, #fffdf6 0%, rgba(255,253,246,0) 70%),
-      var(--bg);
+    background-color:#F6EDDB;
+    background-image:url("paper-bg.svg");
+    background-repeat:repeat;
     font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",Arial,sans-serif;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:48px 20px 36px;
+    padding:clamp(176px,22vh,210px) 20px 36px;
   }
   .head{text-align:center; margin-bottom:38px}
   .eyebrow{font-size:12px; letter-spacing:.32em; color:var(--gold); margin-bottom:14px}
@@ -61,17 +61,22 @@
     body{justify-content:flex-start; padding-top:40px}
   }
 </style>
+<style id="neepy-brand-fix">
+  @media(max-width:680px){
+    body{padding-top:clamp(124px,18vh,150px)!important}.neepy-brand{width:min(260px,66vw)!important}
+  }
+</style>
 </head>
 <body>
+  <img class="neepy-brand" src="logo-d-neepy-oriental.svg" alt="Neepy · 音乐 · 王一涵" style="position:fixed;left:16px;top:14px;z-index:2147483647;display:block;width:clamp(240px,30vw,420px);height:auto;margin:0;padding:0;border:0;border-radius:0;box-shadow:none;line-height:0;pointer-events:none">
   <div class="head">
-    <img class="neepy-brand" src="logo-d-neepy-oriental.svg" alt="Neepy · 音乐 · 王一涵" style="display:block;width:min(240px,62vw);height:auto;margin:0 auto 20px;border-radius:10px;box-shadow:0 2px 12px rgba(60,48,24,.08)">
     <div class="eyebrow">听 见 华 夏</div>
     <h1>交互网页入口</h1>
     <p class="sub">三个在线交互页，点选进入；打开后无需安装、无需登录。</p>
   </div>
 
   <div class="grid">
-    <a class="card" href="bayin-experience/">
+    <a class="card" href="bayin-experience/index.html">
       <span class="tag">八音 · 音色</span>
       <h2>八音分类体验馆</h2>
       <p class="desc">金、石、土、木／丝、竹、匏、革八件乐器，点击聆听音色、连奏八音，附「听辨音色」小游戏三档难度。</p>
@@ -79,7 +84,7 @@
       <div class="path">bayin-experience ／ 八音分类体验馆</div>
     </a>
 
-    <a class="card qin" href="jiuxiao-huanpei/">
+    <a class="card qin" href="jiuxiao-huanpei/index.html">
       <span class="tag">古琴 · 3D</span>
       <h2>九霄环佩古琴3D</h2>
       <p class="desc">唐代「九霄环佩」琴三维细部赏析，可拖动旋转、滚轮缩放，六种视角与二十处细部索引逐一点选。</p>
@@ -87,7 +92,7 @@
       <div class="path">jiuxiao-huanpei ／ 九霄环佩古琴3D</div>
     </a>
 
-    <a class="card heming" href="zhongqing-heming/">
+    <a class="card heming" href="zhongqing-heming/index.html">
       <span class="tag">金石 · 演奏</span>
       <h2>钟磬和鸣</h2>
       <p class="desc">曾侯乙编钟、编磬模拟演奏：一键切换乐器，点击钟体或琴键发声，可辨正鼓音、侧鼓音与音高映射。</p>
