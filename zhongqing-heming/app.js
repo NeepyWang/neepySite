@@ -59,6 +59,7 @@
   let selectedItem = null;
   let noticeTimer = null;
   let audioContext = null;
+  let audioUnlocked = false;
 
   // 音频解锁必须在用户手势的同步阶段完成：Safari / 鸿蒙等浏览器要求
   // AudioContext 在点击当下创建并 resume，否则等大体积录音脚本异步加载完后，
@@ -68,6 +69,22 @@
     if (!AudioContextClass) return;
     if (!audioContext) {
       try { audioContext = new AudioContextClass(); } catch (error) { return; }
+    }
+    // iOS Safari / 鸿蒙等必须在用户手势的同步调用栈里真正 start 一个
+    // （静音）source，才能解锁音频输出；仅 resume() 不足以让后续异步
+    // 播放出声。这里放一个 1 采样的静音、增益为 0 的 source，人耳听不到。
+    if (!audioUnlocked) {
+      try {
+        const silent = audioContext.createBuffer(1, 1, audioContext.sampleRate || 44100);
+        const silentSource = audioContext.createBufferSource();
+        silentSource.buffer = silent;
+        const silentGain = audioContext.createGain();
+        silentGain.gain.value = 0;
+        silentSource.connect(silentGain);
+        silentGain.connect(audioContext.destination);
+        silentSource.start(0);
+        audioUnlocked = true;
+      } catch (error) { /* 首次解锁失败则下次手势再试 */ }
     }
     if (audioContext.state === 'suspended') {
       const resumeResult = audioContext.resume();
