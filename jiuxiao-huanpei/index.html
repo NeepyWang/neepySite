@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>九霄环佩 · 唐琴三维细部赏析</title>
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
@@ -216,11 +216,103 @@ body.immersed #exitImmersed{display:block}
 }
 </style>
 <style id="neepy-brand-fix">
-  header{padding-left:160px!important}
-  @media(max-width:620px){
-    header{flex:0 0 100px!important;padding:38px 12px 6px!important;padding-left:12px!important}
-    .neepy-brand{width:88px!important;left:10px!important;top:6px!important}
+/* 桌面：为左上角固定品牌标识预留位置，其余版式完全沿用原版 */
+header{padding-left:160px!important}
+html,body{max-width:100%;overflow-x:hidden}
+body{height:100dvh}
+.layout{min-width:0;max-width:100vw}
+
+@media (max-width:1080px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  header{padding-left:132px!important;padding-right:12px!important;gap:8px}
+  .title h1{font-size:20px!important}
+  .title p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34vw}
+  .headRight{gap:6px}
+  .ghostBtn{padding:6px 8px!important;font-size:11px!important}
+  footer{padding-left:140px}
+  aside{max-width:100vw;overscroll-behavior:contain;background:#fdfaf2!important}
+  body.drawerOpen #toolbar{opacity:.28;pointer-events:none}
+  body.drawerOpen #stageTop{opacity:.25}
+  body.drawerOpen #stage::after{
+    content:"";position:absolute;inset:0;z-index:2;
+    background:rgba(44,30,18,.30);pointer-events:auto;
   }
+  body.immersed.drawerOpen #stage::after{display:none}
+}
+
+@media (max-width:620px){
+  header{
+    flex:0 0 auto!important;padding:6px 10px 8px!important;padding-left:10px!important;
+    padding-top:calc(6px + env(safe-area-inset-top))!important;
+    flex-wrap:wrap;align-content:center;gap:6px 8px;min-width:0;
+  }
+  .seal{width:30px!important;height:30px!important;flex:0 0 30px!important;font-size:17px!important}
+  .title{flex:1 1 auto;min-width:0}
+  .title h1{font-size:17px!important;letter-spacing:.12em;white-space:nowrap}
+  .title p{display:none!important}
+  .headRight{
+    margin-left:0!important;flex:1 0 100%;min-width:0;
+    display:flex;justify-content:space-between;gap:5px;flex-wrap:nowrap;
+  }
+  .mobileBtns{display:flex;gap:5px;flex:2 1 0;min-width:0}
+  .ghostBtn{
+    flex:1 1 0;min-width:0;padding:7px 3px!important;
+    font-size:11px!important;letter-spacing:0!important;text-align:center;
+  }
+  .mobileBtns .ghostBtn{flex:1 1 0}
+  .headNote{display:none!important}
+  #stageTop{left:10px!important;top:8px!important;font-size:0!important;letter-spacing:0}
+  #stageTop b{display:block;font-size:12px;letter-spacing:.12em;margin:0 0 2px}
+  #stageTop::after{
+    content:"单指旋转 · 双指缩放 · 点击圆点看细部";
+    display:block;font-size:10px;letter-spacing:0;line-height:1.5;
+  }
+  #hint{display:none!important}
+  #toolbar{
+    left:8px!important;right:8px!important;bottom:calc(42px + env(safe-area-inset-bottom))!important;
+    transform:none!important;width:auto!important;max-width:none!important;
+    flex-wrap:wrap;justify-content:center;gap:2px;padding:5px 4px!important;
+  }
+  .tbtn{
+    flex:0 0 calc(16.666% - 3px);padding:7px 4px!important;
+    font-size:10.5px!important;min-height:32px;line-height:1;text-align:center;
+  }
+  .tsep{display:none!important}
+  footer{display:none!important}
+  #toast{top:auto!important;bottom:120px!important;max-width:calc(100% - 24px);text-align:center}
+  #exitImmersed{right:10px!important;top:10px!important}
+  .detail{padding:16px 16px 24px}
+  .dTitle{font-size:21px}
+  aside{width:min(86vw,300px)}
+  .neepy-brand{
+    width:70px!important;left:auto!important;right:8px!important;top:5px!important;opacity:.5!important;
+  }
+  #huaxiaBack{
+    bottom:calc(6px + env(safe-area-inset-bottom))!important;left:8px!important;
+    padding:5px 10px!important;font-size:10px!important;border-radius:16px!important;
+  }
+}
+
+/* 手机横屏 / 矮视口：压缩页眉与页脚，把高度让给 3D 舞台 */
+@media (max-height:520px) and (min-width:621px){
+  header{
+    flex:0 0 44px!important;padding-top:0!important;padding-bottom:0!important;
+    padding-right:10px!important;flex-wrap:nowrap;gap:8px;
+  }
+  .seal{width:28px!important;height:28px!important;flex:0 0 28px!important;font-size:15px!important}
+  .title h1{font-size:15px!important}
+  .title p,.headNote{display:none!important}
+  .ghostBtn{padding:5px 8px!important;font-size:10.5px!important}
+  #stageTop,#hint{display:none!important}
+  footer{display:none!important}
+  #toolbar{bottom:6px!important;gap:1px;padding:3px!important}
+  .tbtn{padding:5px 6px!important;font-size:10px!important;min-height:26px}
+  #huaxiaBack{
+    bottom:4px!important;left:6px!important;padding:4px 8px!important;font-size:9.5px!important;
+  }
+  .neepy-brand{width:58px!important;opacity:.42!important;top:2px!important}
+  aside{width:min(60vw,280px)}
+}
 </style>
 </head>
 <body>
@@ -322,7 +414,7 @@ var key=new THREE.DirectionalLight(0xfff3e5,1.40);key.position.set(-3,9,5);scene
 var fill=new THREE.DirectionalLight(0xe3eaf5,.48);fill.position.set(4,4,-6);scene.add(fill);
 var under=new THREE.DirectionalLight(0xfff3e5,1.05);under.position.set(1,-7,4);scene.add(under);
 var qin=new THREE.Group();scene.add(qin);
-new THREE.GLTFLoader().load("./assets/jiuxiao-huanpei.glb?v=20261114-inscriptions",function(gltf){
+new THREE.GLTFLoader().load("./assets/jiuxiao-huanpei.glb",function(gltf){
   gltf.scene.traverse(function(o){
     if(!o.isMesh)return;
     o.castShadow=true;o.receiveShadow=true;
@@ -336,7 +428,16 @@ new THREE.GLTFLoader().load("./assets/jiuxiao-huanpei.glb?v=20261114-inscription
   qin.add(gltf.scene);
   document.getElementById("loader").classList.add("gone");
   host.dataset.model="ready";
-},undefined,function(){
+},function(evt){
+  var el=document.getElementById("loader");
+  if(!el) return;
+  if(evt && evt.lengthComputable && evt.total>0){
+    var pct=Math.min(100,Math.round(evt.loaded/evt.total*100));
+    el.textContent=pct>=100?"正 在 渲 染 …":"正 在 载 入 唐 琴 … "+pct+"%";
+  }else if(evt && evt.loaded){
+    el.textContent="正 在 载 入 唐 琴 … "+(Math.round(evt.loaded/1048576*10)/10)+" MB";
+  }
+},function(){
   host.dataset.model="error";
   document.getElementById("loader").innerHTML='<div style="text-align:center;line-height:2">模型未能加载<br><small>请刷新页面重试。</small><br><button class="ghostBtn" onclick="location.reload()">重新加载</button></div>';
 });
@@ -476,7 +577,19 @@ function toast(msg){
 function closeMobile(){
   document.getElementById("leftPanel").classList.remove("open");
   document.getElementById("rightPanel").classList.remove("open");
+  document.body.classList.remove("drawerOpen");
 }
+function setDrawer(which){
+  var l=document.getElementById("leftPanel"),r=document.getElementById("rightPanel");
+  l.classList.toggle("open",which==="left");
+  r.classList.toggle("open",which==="right");
+  document.body.classList.toggle("drawerOpen",!!which&&window.innerWidth<1080);
+}
+document.addEventListener("click",function(e){
+  if(window.innerWidth>=1080||!document.body.classList.contains("drawerOpen")) return;
+  if(e.target.closest&&(e.target.closest("aside")||e.target.closest("#btnLeft")||e.target.closest("#btnRight"))) return;
+  setDrawer(null);
+});
 
 /* ============================================================
    5. 相机与轨道控制
@@ -505,7 +618,7 @@ var st={yaw:VIEWS.overview.yaw,pitch:VIEWS.overview.pitch,dist:VIEWS.overview.di
     setTimeout(function(){ focusPart(pid); },260);
   }
 })();
-var velYaw=0,velPitch=0,dragging=false,lastX=0,lastY=0,downX=0,downY=0,moved=false,shiftPan=false;
+var velYaw=0,velPitch=0,dragging=false,lastX=0,lastY=0,downX=0,downY=0,moved=false,shiftPan=false,pinching=false;
 var spin=false,labelsOn=true,tween=null,currentPart=null;
 
 function flyTo(v,ms){
@@ -524,9 +637,14 @@ function updateTween(now){
   st.target.lerpVectors(tween.from.target,tween.to.target,e);
   if(k>=1) tween=null;
 }
+function fitScale(){
+  var a=Math.max(.35,camera.aspect);
+  if(a>=1.20&&a<=2.00) return Math.max(1,1.45/a);
+  return clamp(Math.pow(1.45/a,.78),.80,2.45);
+}
 function updateCamera(){
   var cp=Math.cos(st.pitch),sp=Math.sin(st.pitch);
-  var distance=st.dist*Math.max(1,1.45/camera.aspect);
+  var distance=st.dist*fitScale();
   camera.position.set(
     st.target.x+distance*cp*Math.sin(st.yaw),
     st.target.y+distance*sp,
@@ -537,12 +655,13 @@ function updateCamera(){
 
 var el=renderer.domElement;
 el.addEventListener("pointerdown",function(e){
+  if(e.pointerType==="touch"&&e.isPrimary===false) return;
   dragging=true;moved=false;shiftPan=e.shiftKey||e.button===2;
   lastX=downX=e.clientX;lastY=downY=e.clientY;
   el.setPointerCapture(e.pointerId); tween=null;
 });
 el.addEventListener("pointermove",function(e){
-  if(!dragging) return;
+  if(!dragging||pinching) return;
   var dx=e.clientX-lastX,dy=e.clientY-lastY;
   lastX=e.clientX;lastY=e.clientY;
   if(Math.abs(e.clientX-downX)+Math.abs(e.clientY-downY)>5) moved=true;
@@ -568,6 +687,7 @@ el.addEventListener("dblclick",function(){ clearFocus(); flyTo(VIEWS.overview); 
 var touchD=0;
 el.addEventListener("touchstart",function(e){
   if(e.touches.length===2){
+    pinching=true; dragging=false;
     touchD=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
   }
 },{passive:true});
@@ -577,7 +697,7 @@ el.addEventListener("touchmove",function(e){
     st.dist=clamp(st.dist*touchD/d,2.6,42); touchD=d; tween=null;
   }
 },{passive:true});
-el.addEventListener("touchend",function(){touchD=0;},{passive:true});
+el.addEventListener("touchend",function(e){ if(e.touches.length<2){pinching=false;touchD=0;} },{passive:true});
 
 /* 点击琴体：找最近的细部锚点 */
 var raycaster=new THREE.Raycaster(), ndc=new THREE.Vector2();
@@ -646,7 +766,7 @@ function focusPart(id){
   disc.quaternion.setFromUnitVectors(V(0,0,1),arr(p.normal).normalize());
   var sz=p.id==="qixian"||p.id==="arc"||p.id==="qiwen"?1.5:1;
   disc.scale.setScalar(sz); disc.visible=true;
-  if(window.innerWidth<1080){ document.getElementById("rightPanel").classList.add("open"); }
+  if(window.innerWidth<1080){ setDrawer("right"); }
 }
 
 /* 视角按钮 */
@@ -670,6 +790,7 @@ document.getElementById("btnReset").onclick=function(){
   Array.prototype.forEach.call(document.querySelectorAll("[data-view]"),function(o){o.classList.toggle("on",o.dataset.view==="overview");});
 };
 function toggleImmersed(on){
+  setDrawer(null);
   document.body.classList.toggle("immersed",!!on);
   if(on && document.documentElement.requestFullscreen){
     document.documentElement.requestFullscreen().catch(function(){});
@@ -681,12 +802,12 @@ function toggleImmersed(on){
 document.getElementById("btnImmersed").onclick=function(){toggleImmersed(true);};
 document.getElementById("exitImmersed").onclick=function(){toggleImmersed(false);};
 document.getElementById("btnLeft").onclick=function(){
-  var l=document.getElementById("leftPanel"); l.classList.toggle("open");
-  document.getElementById("rightPanel").classList.remove("open");
+  var on=document.getElementById("leftPanel").classList.contains("open");
+  setDrawer(on?null:"left");
 };
 document.getElementById("btnRight").onclick=function(){
-  var r=document.getElementById("rightPanel"); r.classList.toggle("open");
-  document.getElementById("leftPanel").classList.remove("open");
+  var on=document.getElementById("rightPanel").classList.contains("open");
+  setDrawer(on?null:"right");
 };
 
 /* WebXR */
@@ -743,6 +864,8 @@ function resize(){
   renderer.setSize(w,h,false);
 }
 window.addEventListener("resize",resize);
+window.addEventListener("orientationchange",function(){setTimeout(resize,120);});
+if(window.visualViewport) window.visualViewport.addEventListener("resize",resize);
 if(window.ResizeObserver) new ResizeObserver(resize).observe(host);
 resize();
 

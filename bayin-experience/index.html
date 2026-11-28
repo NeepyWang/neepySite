@@ -310,11 +310,20 @@ body.quiz-open{overflow:hidden}
 
 .q-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .q-opt{
-  padding:18px 12px;border-radius:10px;cursor:pointer;text-align:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:112px;padding:8px 10px;border-radius:10px;cursor:pointer;text-align:center;
   border:1px solid rgba(90,170,220,.2);background:rgba(12,30,48,.55);
   color:#eaf8ff;font:inherit;
   transition:border-color .22s,background .22s,box-shadow .22s,opacity .22s;
 }
+/* 入门 / 进阶：选项只用乐器图片，不出现可见文字；aria-label 供读屏使用 */
+.q-opt-img{
+  display:block;width:100%;height:clamp(84px,9vw,112px);object-fit:contain;
+  pointer-events:none;filter:drop-shadow(0 4px 14px rgba(46,164,255,.28));
+  transition:transform .22s ease,filter .22s ease;
+}
+/* 大师：选项改回八音类别汉字 + 制作材料小字，比图片模式更紧凑 */
+.q-opt.q-opt-text{min-height:0;padding:16px 10px}
 .q-opt em{display:block;font-style:normal;font-size:20px;letter-spacing:.1em;line-height:1.3}
 .q-opt small{
   display:block;margin-top:5px;
@@ -325,17 +334,22 @@ body.quiz-open{overflow:hidden}
   border-color:rgba(130,230,255,.7);background:rgba(24,66,102,.7);
   box-shadow:0 0 18px rgba(50,170,240,.28);
 }
+.q-opt:hover:not(:disabled) .q-opt-img{
+  transform:scale(1.07);filter:drop-shadow(0 6px 20px rgba(96,216,255,.65));
+}
 .q-opt:disabled{cursor:default}
 .q-opt.ok{
   border-color:rgba(120,240,220,.85);background:rgba(16,80,80,.62);
   box-shadow:0 0 22px rgba(40,220,200,.3);
 }
+.q-opt.ok .q-opt-img{filter:drop-shadow(0 0 17px rgba(80,240,215,.9)) brightness(1.08)}
 .q-opt.ok em{color:#c8fff6}
 .q-opt.ok small{color:#79c9bb}
 .q-opt.bad{
   border-color:rgba(255,140,130,.8);background:rgba(90,30,32,.62);
   box-shadow:0 0 22px rgba(255,110,100,.24);
 }
+.q-opt.bad .q-opt-img{filter:drop-shadow(0 0 17px rgba(255,120,110,.9)) brightness(1.05)}
 .q-opt.bad em{color:#ffd8d2}
 .q-opt.bad small{color:#c58a84}
 .q-opt.dim{opacity:.38}
@@ -417,6 +431,9 @@ body.quiz-open{overflow:hidden}
   .q-modes{grid-template-columns:1fr;gap:9px}
   .q-mode{padding:13px 14px}
   .q-options{grid-template-columns:repeat(2,1fr);gap:8px}
+  .q-opt{min-height:92px;padding:6px}
+  .q-opt.q-opt-text{min-height:0;padding:12px 8px}
+  .q-opt-img{height:76px}
   .q-play{width:64px;height:64px}
   .q-play svg{width:26px;height:26px}
   .q-rank{font-size:22px}
@@ -649,7 +666,7 @@ body.quiz-open{overflow:hidden}
     <section class="info" aria-live="polite">
       <div class="info-title" id="infoTitle">八音 · 金、石、土、革、丝、木、匏、竹</div>
       <div class="info-desc" id="infoDesc">中国最早按制作材料划分乐器的分类法，始于西周。点击任意一件乐器，聆听它的声音与故事。</div>
-      <div class="info-src" id="infoSrc">音色：Web Audio 实时合成 · 支持接入真实录音</div>
+      <div class="info-src" id="infoSrc">音色：真实乐器录音</div>
     </section>
     <div class="dock">
       <button class="btn primary" id="btnAll" type="button">连奏八音</button>
@@ -676,13 +693,116 @@ body.quiz-open{overflow:hidden}
 
 <script>
 /* ============================================================
-   真实录音替换入口：把音频文件放到同目录下，填入相对路径即可。
-   例如把 编钟.mp3 放到 ./audio/jin.mp3，则写 jin:"./audio/jin.mp3"
+   真实录音替换入口：把音频文件放到 ./audio/ 下，填入相对路径即可。
    留空时使用下方 Web Audio 实时合成音色。
+   2026-11-14 全局音频统一处理（处理前原文件备份：
+     ../../backup/audio-统一处理前-20261114-0230/）：
+     剪掉各段开头静音，保证点击后 0.1 秒内出声；综合响度统一到
+     -20 LUFS（EBU R128 / loudnorm 测量，八段实测 -20.3 ~ -20.7）；
+     真峰值限幅 -2 dBFS 防削波；统一 44.1 kHz 立体声 mp3。
+     内容、音高、乐句均未改动。
+     开头剪除：jin 2.86s / shi 0.64s / si 0.14s / mu 0.39s /
+     zhu 0.44s / ge 0.54s；tu、pao 原开头即有声，未剪。
+   编钟(jin)：./audio/jin.mp3 ——《竹枝词》，专辑
+     《千古绝响：曾侯乙编钟之声》(网易云音乐 song id 5262031)，
+     原 2:46，开头 2.86 秒为纯静音，剪除后约 2:43。
+   编磬(shi)：./audio/shi.mp3 —— 编磬音效（爱给网素材），14.3 秒。
+   埙  (tu)：./audio/tu.mp3  —— 埙音效（爱给网素材），8.6 秒。
+   古琴(si)：./audio/si.mp3  —— 古琴旋律（爱给网素材），8.5 秒。
+   柷  (mu)：./audio/mu.mp3  —— 柷演奏片段，10.3 秒。
+     用户提供文件《柷-韩国国立国乐院-演奏-音色参考.mp3》，
+     为韩国国立国乐院雅乐演奏中的柷声，此处作为中国雅乐柷的音色参考。
+     旧版北京日报「击柷三声」2.8 秒已备份至
+     ../../backup/mu-北京日报三声-20261114-0114.mp3。
+   箫  (zhu)：./audio/zhu.mp3 ——「竹」类箫独奏，35.3 秒。
+     用户提供文件《箫-xserra-中国音乐学院学生演奏-公开预览.mp3》，
+     为中国音乐学院学生洞箫演奏的公开预览录音。
+   笙  (pao)：./audio/pao.mp3 ——「匏」类笙演奏，25.0 秒。
+     取自 B 站视频 BV1Z441147Rr《笙獻竽》張婉俞笙、作曲音樂會
+     第 1 P「01 吹起蘆笙唱豐收」(cid 89196989) 的 32–57 秒，
+     由 dash 音轨(AAC 128k)裁出并转 mp3；首 2.5 秒是原曲轻起音，
+     统一处理时做平滑 +9→0 dB 提升让点击即可听，乐句与音高未改。
+   鼓  (ge)：./audio/ge.mp3 ——「革」类中国鼓演奏，7.5 秒。
+     取自 B 站视频 BV1L3XrBrExA《中国鼓一响，所有迷茫都有了方向｜
+     长路漫漫伴你闯》(北京击鼓乐团，cid 37126211038) 的前 8 秒，
+     由 dash 音轨(AAC 112k)裁出并转 mp3；开头 0.54 秒原片起幅静音
+     已在统一处理时剪除，内容未剪。
+   八段录音版权归各自权利人所有，此处仅作教学展示使用，
+   页面播放时会标注来源；覆盖对应文件即可换音，无需改代码。
+   文件缺失或解码失败时自动回退到 Web Audio 合成音色。
+
+   听辨小游戏题目音色：./audio/quiz/ 下另有 20 段短样本（每件 2–3 段、
+   每段 2.6 秒），从上述八段真实录音中裁出，与点击卡片的声音同源，
+   同样统一到 -20 LUFS、首尾淡入淡出、真峰值限幅。见 QUIZ_CLIPS。
    ============================================================ */
 const AUDIO_SOURCES = {
-  jin:"", shi:"", tu:"", ge:"", si:"", mu:"", pao:"", zhu:""
+  jin:"./audio/jin.mp3",
+  shi:"./audio/shi.mp3",
+  tu:"./audio/tu.mp3",
+  si:"./audio/si.mp3",
+  mu:"./audio/mu.mp3",
+  zhu:"./audio/zhu.mp3",
+  pao:"./audio/pao.mp3",
+  ge:"./audio/ge.mp3"
 };
+const AUDIO_CREDITS = {
+  jin:"《竹枝词》· 曾侯乙编钟之声",
+  shi:"编磬音效 · 爱给网",
+  tu:"埙音效 · 爱给网",
+  si:"古琴旋律 · 爱给网",
+  mu:"柷演奏 · 韩国国立国乐院（音色参考）",
+  zhu:"箫独奏 · 中国音乐学院学生演奏（xserra 公开预览）",
+  pao:"笙演奏 · B站《笙獻竽》張婉俞（32–57 s）",
+  ge:"中国鼓演奏 · B站北京击鼓乐团（0–8 s）"
+};
+
+/* ------------------------------------------------------------
+   听辨题目音色：从上面八段真实录音裁出的短样本（每件 2–3 段，
+   每段 2.6 秒），出题时随机抽一段，与点击卡片听到的录音同源。
+   裁剪点按各段能量自动挑选，全部 -20 LUFS 响度归一、首尾淡入淡出、
+   真峰值限幅，文件内首声 0.00–0.06 秒。出题只出声、不点亮卡片、
+   不显示来源，避免泄题；加载失败才回退合成音色 playCueSynth。
+   ------------------------------------------------------------ */
+const QUIZ_CLIPS = {
+  jin:["./audio/quiz/jin_1.mp3","./audio/quiz/jin_2.mp3","./audio/quiz/jin_3.mp3"],
+  shi:["./audio/quiz/shi_1.mp3","./audio/quiz/shi_2.mp3","./audio/quiz/shi_3.mp3"],
+  tu:["./audio/quiz/tu_1.mp3","./audio/quiz/tu_2.mp3"],
+  si:["./audio/quiz/si_1.mp3","./audio/quiz/si_2.mp3"],
+  mu:["./audio/quiz/mu_1.mp3","./audio/quiz/mu_2.mp3"],
+  zhu:["./audio/quiz/zhu_1.mp3","./audio/quiz/zhu_2.mp3","./audio/quiz/zhu_3.mp3"],
+  pao:["./audio/quiz/pao_1.mp3","./audio/quiz/pao_2.mp3","./audio/quiz/pao_3.mp3"],
+  ge:["./audio/quiz/ge_1.mp3","./audio/quiz/ge_2.mp3"]
+};
+const QUIZ_POOL = {};
+let quizWarmed = false;
+function warmQuizAudio(){
+  if(quizWarmed) return;
+  quizWarmed = true;
+  Object.keys(QUIZ_CLIPS).forEach(id=>{
+    QUIZ_CLIPS[id].forEach(url=>{
+      if(QUIZ_POOL[url]) return;
+      const a = new Audio();
+      a.preload = "auto";
+      a.src = url;
+      a.load();
+      QUIZ_POOL[url] = a;
+    });
+  });
+}
+
+/* 预加载八段真实录音：页面载入时就建好播放器并缓冲，
+   避免第一次点击时媒体管线冷启动约 1 秒的延迟；排版与玩法不变。 */
+const AUDIO_POOL = {};
+(function warmAudio(){
+  Object.keys(AUDIO_SOURCES).forEach(id=>{
+    if(!AUDIO_SOURCES[id]) return;
+    const a = new Audio();
+    a.preload = "auto";
+    a.src = AUDIO_SOURCES[id];
+    a.load();
+    AUDIO_POOL[id] = a;
+  });
+})();
 
 const N = {
   C3:130.81, D3:146.83, F3:174.61, G3:196.00, A3:220.00,
@@ -1121,13 +1241,28 @@ function playInstrument(index){
 
   if(AUDIO_SOURCES[it.id]){
     stopAll();
-    setPlaying(index,"真实录音");
-    audioEl = new Audio(AUDIO_SOURCES[it.id]);
-    audioEl.volume = document.getElementById("vol").value/100;
-    audioEl.play().catch(()=>{});
-    audioEl.onended = ()=>{ stopAll(); };
+    const credit = AUDIO_CREDITS[it.id];
+    setPlaying(index, credit ? "真实录音 · "+credit : "真实录音");
+    const a = AUDIO_POOL[it.id] || new Audio(AUDIO_SOURCES[it.id]);
+    AUDIO_POOL[it.id] = a;
+    try{ a.currentTime = 0; }catch(e){}
+    audioEl = a;
+    a.volume = document.getElementById("vol").value/100;
+    const fallback = ()=>{
+      if(audioEl!==a) return;          /* 已被 stopAll 接管，不要重复回退 */
+      audioEl = null;
+      a.onerror = null; a.onended = null;
+      playSynth(index);
+    };
+    a.onerror = fallback;
+    a.onended = ()=>{ if(audioEl===a) stopAll(); };
+    a.play().catch(fallback);
     return;
   }
+  playSynth(index);
+}
+function playSynth(index){
+  const it = INSTRUMENTS[index];
   /* 先停旧会话再点亮卡片，否则高亮会被 stopAll 立刻清掉 */
   const s = newSession();
   setPlaying(index,"Web Audio 实时合成");
@@ -1175,7 +1310,7 @@ function playAll(){
 const DEFAULT_INFO = {
   title:"八音 · 金、石、土、革、丝、木、匏、竹",
   desc:"中国最早按制作材料划分乐器的分类法，始于西周。点击任意一件乐器，聆听它的声音与故事。",
-  src:"音色：Web Audio 实时合成 · 支持接入真实录音"
+  src:"音色：真实乐器录音"
 };
 function resetInfo(){
   document.getElementById("infoTitle").textContent = DEFAULT_INFO.title;
@@ -1186,7 +1321,7 @@ function resetInfo(){
 document.getElementById("btnStop").addEventListener("click",()=>{
   stopAll();
   resetInfo();
-  document.getElementById("infoSrc").textContent="已停止 · 音色：Web Audio 实时合成";
+  document.getElementById("infoSrc").textContent="已停止 · 音色：真实乐器录音";
 });
 document.getElementById("btnAll").addEventListener("click",playAll);
 document.getElementById("vol").addEventListener("input",e=>{
@@ -1198,22 +1333,30 @@ document.getElementById("vol").addEventListener("input",e=>{
 /* ============================================================
    听辨音色小游戏
    ------------------------------------------------------------
-   三个难度共用一套题：每轮 10 题，从八件乐器里随机抽（一轮内八件
-   至少各出现一次）。出题时只放声音、不点亮卡片，避免泄题；答完
+   三个难度共用一套出题逻辑：从打乱后的八件乐器依次取题，一副牌
+   用完才补新的一副。入门 / 进阶每轮 8 题，八件乐器各一题、不重复；
+   大师每轮 10 题。出题时只放声音、不点亮卡片，避免泄题；答完
    立刻给正误、正确乐器与一句小知识；结算页可回听错题。最高分存在
    本机 localStorage，不上传。
+   2026-11-14：题目音色由 Web Audio 合成改为各乐器真实录音的短样本
+   （见 QUIZ_CLIPS / playCue），与卡片点击同源；合成仅作加载失败兜底。
+   2026-11-14 二次修订：入门/进阶选项改为乐器图片（无可见文字）；每题固定一段
+   片段，出题后、揭晓答案后都能无限次重听同一段；问答后空格键同样有效。
+   2026-11-14 三次修订：入门/进阶每局 8 题（八件乐器各一题、不重复）；
+   大师选项恢复为「金石土木丝竹匏革」文字，题数仍为 10 题。
    ============================================================ */
 const MAT_HINT = {
   金:"青铜铸造", 石:"玉石磨制", 土:"陶土烧制", 木:"木斗为腔",
   丝:"蚕丝为弦", 竹:"竹管为体", 匏:"葫芦为斗", 革:"皮革蒙面"
 };
 const MAT_ORDER = ["金","石","土","木","丝","竹","匏","革"];
-const QUIZ_TOTAL = 10;
+const QUIZ_PHOTO_EXT = ["png","jpg","jpeg","webp"];
+const QUIZ_TOTAL = 8;              /* 默认题数；每个难度可用 mode.total 覆盖 */
 const QUIZ_BEST_KEY = "bayin-quiz-best-v1";
 const QUIZ_MODES = {
-  easy:  {key:"easy",  name:"入门 · 四选一", note:"不限时，可以反复听",              pool:4, timed:false, limit:0,  replays:99, kind:"instrument"},
-  hard:  {key:"hard",  name:"进阶 · 八选一", note:"限时 12 秒，可重听 2 次",          pool:8, timed:true,  limit:12, replays:2,  kind:"instrument"},
-  master:{key:"master",name:"大师 · 听音辨类", note:"限时 10 秒，选出它所属的八音类别", pool:8, timed:true,  limit:10, replays:1,  kind:"material"}
+  easy:  {key:"easy",  name:"入门 · 四选一", note:"8 题 · 不限时 · 可以反复听",           total:8,  pool:4, timed:false, limit:0,  replays:99, kind:"instrument"},
+  hard:  {key:"hard",  name:"进阶 · 八选一", note:"8 题 · 限时 12 秒 · 可重听 2 次",       total:8,  pool:8, timed:true,  limit:12, replays:2,  kind:"instrument"},
+  master:{key:"master",name:"大师 · 听音辨类", note:"10 题 · 限时 10 秒 · 文字选八音类别", total:10, pool:8, timed:true,  limit:10, replays:1,  kind:"material"}
 };
 const SPK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.4h3.3L12.2 5v14L7.3 14.6H4z"/><path d="M15.6 9.2a4.1 4.1 0 0 1 0 5.6"/><path d="M18.2 6.6a7.8 7.8 0 0 1 0 10.8"/></svg>';
 
@@ -1245,10 +1388,46 @@ function writeBest(key,score){
   }catch(e){}
 }
 
-/* 只出声、不点亮卡片：卡片高亮会直接泄露答案 */
-function playCue(inst){
+/* 只出声、不点亮卡片、不显示来源：任何提示都会直接泄露答案。
+   题目音色优先用该乐器真实录音的短样本（QUIZ_CLIPS），与点击卡片
+   听到的录音同源；片段缺失或解码失败才回退到合成音色 playCueSynth。 */
+function playCue(inst, clipUrl){
   ensureAudio();
   if(ctx.state==="suspended") ctx.resume();
+  const clips = QUIZ_CLIPS[inst.id];
+  /* 同一题固定一段片段：重听到的始终是刚才那一段，结算回听也用原题片段。
+     未指定时才随机取（例如从结算页之外单独试听）。 */
+  const url = clipUrl || (clips && clips.length
+    ? clips[Math.floor(Math.random()*clips.length)] : "");
+  if(url){
+    const a = QUIZ_POOL[url] || new Audio(url);
+    QUIZ_POOL[url] = a;
+    a.onerror = null; a.onended = null;  /* 清掉上一次播放留下的回调 */
+    stopAll();                            /* 停掉上一题 / 展厅正在播放的声音 */
+    /* 仅在播过之后才归零：对已预加载但尚未播放的片段强行 seek 会触发
+       一次重新缓冲，令首题起播慢约 1 秒。 */
+    try{ if(a.currentTime > 0.02) a.currentTime = 0; }catch(e){}
+    audioEl = a;                          /* 交给 stopAll 统一管理，切题即可停 */
+    a.volume = document.getElementById("vol").value/100;
+    const fallback = ()=>{
+      if(audioEl!==a) return;             /* 已被 stopAll 接管，不要重复回退 */
+      audioEl = null;
+      a.onerror = null; a.onended = null;
+      playCueSynth(inst);
+    };
+    a.onerror = fallback;
+    a.onended = ()=>{ if(audioEl===a) stopAll(); };
+    a.play().catch(err=>{
+      /* 快速连点时上一次 play 会被 pause 打断，属正常，不要误判成加载失败 */
+      if(err && err.name === "AbortError") return;
+      fallback();
+    });
+    return;
+  }
+  playCueSynth(inst);
+}
+/* 兜底：真实片段不可用时仍用 Web Audio 合成一小句，保证游戏可继续 */
+function playCueSynth(inst){
   const s = newSession();                 /* 内部会停掉上一段 */
   const t0 = ctx.currentTime + .06;
   let t = t0, used = 0;
@@ -1266,6 +1445,7 @@ function playCue(inst){
 function openQuiz(){
   quizOpen = true;
   stopAll();                 /* 先把展厅正在演奏的声音停掉，免得和题目音频叠在一起 */
+  warmQuizAudio();           /* 打开游戏即预缓冲 20 段题目片段，选难度的时间足够加载完 */
   quizEl.hidden = false;
   document.body.classList.add("quiz-open");
   renderStart();
@@ -1302,7 +1482,7 @@ function renderStart(){
     '<div class="q-stage">'+
       '<p class="q-intro">听一段音色，认出它出自哪一件古乐器；<b>进阶</b>要在一轮音列里更快判断，<b>大师</b>则要直接说出它属于八音中的哪一类。</p>'+
       '<div class="q-modes">'+cards+'</div>'+
-      '<p class="q-rule">每局 10 题，八件乐器随机出场。答对按<b>连对</b>与<b>剩余时间</b>加分，答错也能继续；结算时会列出错题，可以逐题回听。'+
+      '<p class="q-rule">题目音色全部取自本页八件乐器的真实录音片段，与点击卡片听到的声音同源。<b>入门 / 进阶</b>每局 8 题，八件乐器各考一题、选项用乐器图片；<b>大师</b>每局 10 题，按「金石土木丝竹匏革」文字辨类。答对按<b>连对</b>与<b>剩余时间</b>加分，答错也能继续；<b>出示答案后仍可反复重听本题音色</b>，结算时也会列出错题逐题回听。'+
       '键盘：<b>1–8</b> 选项 · <b>空格</b> 重听 · <b>回车</b> 下一题 · <b>Esc</b> 退出。</p>'+
     '</div>';
   quizBody.querySelectorAll(".q-mode").forEach(btn=>{
@@ -1311,15 +1491,24 @@ function renderStart(){
 }
 
 /* ---------- 出题 ---------- */
+/* 每题在生成时就抽定一段真实录音片段，整题内自动播放 / 反复重听 /
+   结算回听都用这一段，避免「重听」变成另一段声音。 */
+function pickClip(inst){
+  const clips = QUIZ_CLIPS[inst.id];
+  return clips && clips.length ? clips[Math.floor(Math.random()*clips.length)] : "";
+}
 function buildQuestions(mode){
   const qs = [];
+  const total = mode.total || QUIZ_TOTAL;
   let deck = [];
-  for(let i=0;i<QUIZ_TOTAL;i++){
+  /* 一副牌就是打乱后的八件乐器，用完才补新的一副：
+     total = 8 时正好八件各出一题、不重复。 */
+  for(let i=0;i<total;i++){
     if(!deck.length) deck = shuffle(INSTRUMENTS);
     const inst = deck.pop();
     if(mode.kind === "material"){
       qs.push({
-        inst,
+        inst, clip:pickClip(inst),
         prompt:"听一听，它属于八音中的哪一类？",
         options:shuffle(MAT_ORDER.map(m=>({value:m,label:m,sub:MAT_HINT[m]}))),
         correctValue:inst.material
@@ -1327,9 +1516,9 @@ function buildQuestions(mode){
     }else{
       const others = shuffle(INSTRUMENTS.filter(x=>x.id!==inst.id)).slice(0, mode.pool-1);
       qs.push({
-        inst,
+        inst, clip:pickClip(inst),
         prompt:"听一听，这是哪一件乐器？",
-        options:shuffle([inst].concat(others)).map(x=>({value:x.id,label:x.name,sub:x.material+" · 八音"})),
+        options:shuffle([inst].concat(others)).map(x=>({value:x.id,label:x.name,sub:x.material+" · 八音",img:x.id})),
         correctValue:inst.id
       });
     }
@@ -1342,7 +1531,8 @@ function startRound(modeKey){
   cancelAnimationFrame(quizRAF);
   clearTimeout(cueTimer);
   quizState = {
-    mode, qs:buildQuestions(mode), i:0, score:0, streak:0, best:0,
+    mode, total:mode.total || QUIZ_TOTAL, qs:buildQuestions(mode),
+    i:0, score:0, streak:0, best:0,
     locked:false, left:mode.limit, replaysLeft:mode.replays, marks:[]
   };
   renderQuestion();
@@ -1356,15 +1546,21 @@ function renderQuestion(){
   st.locked = false;
   st.replaysLeft = mode.replays;
 
-  const opts = q.options.map(o=>
-    '<button class="q-opt" type="button" data-value="'+o.value+'">'+
-      '<em>'+o.label+'</em><small>'+o.sub+'</small>'+
-    '</button>').join("");
+  /* 入门 / 进阶：乐器图片、无可见文字；大师：恢复「金石土木丝竹匏革」汉字 +
+     制作材料小字。名称同时写进 aria-label 供读屏使用。 */
+  const opts = q.options.map(o=>{
+    const head = '<button class="q-opt'+(mode.kind === "material" ? " q-opt-text" : "")+
+      '" type="button" data-value="'+o.value+'" '+
+      'aria-label="'+o.label+(o.sub ? " · "+o.sub : "")+'">';
+    return mode.kind === "material"
+      ? head+'<em>'+o.label+'</em><small>'+o.sub+'</small></button>'
+      : head+'<img class="q-opt-img" data-id="'+o.img+'" src="images/'+o.img+'.png" alt="" draggable="false"></button>';
+  }).join("");
 
   quizBody.innerHTML =
     '<div class="q-stage">'+
     '<div class="q-top">'+
-      '<span>第 <b>'+(st.i+1)+'</b> / '+QUIZ_TOTAL+' 题</span>'+
+      '<span>第 <b>'+(st.i+1)+'</b> / '+st.total+' 题</span>'+
       '<span>得分 <b id="qScore">'+st.score+'</b></span>'+
       '<span>连对 <b id="qStreak">'+st.streak+'</b></span>'+
       '<span class="grow"></span>'+
@@ -1386,6 +1582,15 @@ function renderQuestion(){
   quizBody.querySelectorAll(".q-opt").forEach(btn=>{
     btn.addEventListener("click",()=>quizAnswer(btn.dataset.value));
   });
+  /* 图片找不到时依次尝试其它扩展名，仍不显示任何文字 */
+  quizBody.querySelectorAll(".q-opt-img").forEach(img=>{
+    let k = 0;
+    img.addEventListener("error",()=>{
+      k++;
+      if(k < QUIZ_PHOTO_EXT.length){ img.src = "images/"+img.dataset.id+"."+QUIZ_PHOTO_EXT[k]; }
+      else { img.style.visibility = "hidden"; }
+    });
+  });
   document.getElementById("qPlay").addEventListener("click",replayCue);
 
   /* 自动放一遍（不计入重听次数）；用令牌防止上一题的回调串到下一题 */
@@ -1405,13 +1610,23 @@ function playCueNow(){
     btn.classList.add("sounding");
     setTimeout(()=>btn.classList.remove("sounding"),1500);
   }
-  playCue(st.qs[st.i].inst);
+  const q = st.qs[st.i];
+  playCue(q.inst, q.clip);
 }
 function replayCue(){
   const st = quizState;
-  if(!st || st.locked) return;
+  if(!st) return;
+  /* 结算页没有本题喇叭按钮，空格键不应触发 */
+  if(!document.getElementById("qPlay")) return;
+  const hint = document.getElementById("qHint");
+  /* 关键修复：答题后 st.locked 为 true，旧逻辑直接 return，
+     导致出示答案后喇叭按钮点不动。揭晓答案后改为无限次重听。 */
+  if(st.locked){
+    if(hint) hint.textContent = "答案已揭晓 · 可反复重听本题音色";
+    playCueNow();
+    return;
+  }
   if(st.mode.replays < 9){
-    const hint = document.getElementById("qHint");
     if(st.replaysLeft <= 0){
       if(hint) hint.textContent = "本段已不能重听";
       return;
@@ -1465,7 +1680,7 @@ function quizAnswer(value){
   const rightOpt = q.options.filter(o=>o.value===q.correctValue)[0];
   const chosenOpt = value === null ? null : q.options.filter(o=>o.value===value)[0];
   st.marks.push({
-    idx:st.i, inst:q.inst, ok, timedOut,
+    idx:st.i, inst:q.inst, clip:q.clip, ok, timedOut,
     chosenLabel:chosenOpt ? chosenOpt.label : "",
     rightLabel:rightOpt ? rightOpt.label : q.correctValue
   });
@@ -1481,6 +1696,9 @@ function quizAnswer(value){
   const streakEl = document.getElementById("qStreak");
   if(scoreEl) scoreEl.textContent = st.score;
   if(streakEl) streakEl.textContent = st.streak;
+  /* 揭晓答案后喇叭仍然可用，不再显示「已用完重听次数」 */
+  const hint = document.getElementById("qHint");
+  if(hint) hint.textContent = "答案已揭晓 · 点击喇叭可反复重听本题音色";
 
   const fb = document.getElementById("qFeedback");
   fb.className = "q-feedback show " + (ok ? "ok" : "bad");
@@ -1492,14 +1710,14 @@ function quizAnswer(value){
     '<div class="fb-line">'+head+'</div>'+
     '<div class="fb-desc">'+q.inst.desc+'</div>'+
     '<div class="fb-act"><button class="btn primary" id="qNext" type="button">'+
-      (st.i+1 >= QUIZ_TOTAL ? "查看成绩" : "下一题")+
+      (st.i+1 >= st.total ? "查看成绩" : "下一题")+
     '</button></div>';
   document.getElementById("qNext").addEventListener("click",nextQuestion);
 }
 function nextQuestion(){
   const st = quizState;
   if(!st) return;
-  if(st.i+1 >= QUIZ_TOTAL){ renderResult(); return; }
+  if(st.i+1 >= st.total){ renderResult(); return; }
   st.i++;
   renderQuestion();
 }
@@ -1512,9 +1730,11 @@ function renderResult(){
   clearTimeout(cueTimer);
 
   const correct = st.marks.filter(m=>m.ok).length;
-  const rank = correct >= 10 ? "八音通儒"
-             : correct >= 8  ? "知音"
-             : correct >= 6  ? "初识宫商"
+  const total = st.total || QUIZ_TOTAL;
+  /* 评级按本局题数归一化，8 题与 10 题都能拿到「八音通儒」 */
+  const rank = correct >= total ? "八音通儒"
+             : correct >= Math.ceil(total*.8) ? "知音"
+             : correct >= Math.ceil(total*.6) ? "初识宫商"
              : "再听一遍";
   const prev = readBest(st.mode.key);
   const isBest = st.score > prev;
@@ -1525,7 +1745,7 @@ function renderResult(){
     ? '<div class="q-wrong"><h3>错题回听（'+wrongs.length+' 题）</h3>'+
         wrongs.map(m=>
           '<div class="q-wrong-item">'+
-            '<button class="w-play" type="button" data-inst="'+m.inst.id+'" aria-label="重听 '+m.inst.name+'">▶</button>'+
+            '<button class="w-play" type="button" data-inst="'+m.inst.id+'" data-clip="'+(m.clip||"")+'" aria-label="重听 '+m.inst.name+'">▶</button>'+
             '<span>第 '+(m.idx+1)+' 题</span>'+
             '<span class="w-arrow">·</span>'+
             '<span>你选 '+(m.timedOut ? "—（超时未答）" : m.chosenLabel)+'</span>'+
@@ -1533,7 +1753,7 @@ function renderResult(){
             '<span class="w-right">'+m.inst.material+' · '+m.inst.name+'</span>'+
           '</div>').join("")+
       '</div>'
-    : '<p class="q-sub" style="margin-top:18px;color:#8ff2dd">十题全对，八音皆能辨。</p>';
+    : '<p class="q-sub" style="margin-top:18px;color:#8ff2dd">'+total+' 题全对，八音皆能辨。</p>';
 
   quizBody.innerHTML =
     '<div class="q-result">'+
@@ -1542,7 +1762,7 @@ function renderResult(){
         st.mode.name+' · 最高分 '+Math.max(prev, st.score)+'</div>'+
       '<div class="q-stats">'+
         '<div class="q-stat"><b>'+st.score+'</b><span>本局得分</span></div>'+
-        '<div class="q-stat"><b>'+correct+' / '+QUIZ_TOTAL+'</b><span>答对题数</span></div>'+
+        '<div class="q-stat"><b>'+correct+' / '+total+'</b><span>答对题数</span></div>'+
         '<div class="q-stat"><b>'+st.best+'</b><span>最高连对</span></div>'+
       '</div>'+
       wrongHtml+
@@ -1559,7 +1779,7 @@ function renderResult(){
   quizBody.querySelectorAll(".w-play").forEach(btn=>{
     btn.addEventListener("click",()=>{
       const inst = INSTRUMENTS.filter(x=>x.id===btn.dataset.inst)[0];
-      if(inst) playCue(inst);
+      if(inst) playCue(inst, btn.dataset.clip || "");
     });
   });
   quizEl.querySelector(".quiz-panel").scrollTop = 0;
@@ -1573,7 +1793,7 @@ document.addEventListener("keydown",e=>{
   const st = quizState;
   if(e.key === " "){
     e.preventDefault();
-    if(!st.locked) replayCue();
+    replayCue();          /* 答完题后空格同样可以反复重听 */
     return;
   }
   if(e.key === "Enter"){
