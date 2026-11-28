@@ -60,6 +60,21 @@
   let noticeTimer = null;
   let audioContext = null;
 
+  // 音频解锁必须在用户手势的同步阶段完成：Safari / 鸿蒙等浏览器要求
+  // AudioContext 在点击当下创建并 resume，否则等大体积录音脚本异步加载完后，
+  // 手势授权已过期，AudioContext 保持 suspended，source.start() 会静默无声。
+  // 这里不触碰任何录音素材（bell/qing-audio-data.js 保持不变）。
+  function unlockAudio() {
+    if (!AudioContextClass) return;
+    if (!audioContext) {
+      try { audioContext = new AudioContextClass(); } catch (error) { return; }
+    }
+    if (audioContext.state === 'suspended') {
+      const resumeResult = audioContext.resume();
+      if (resumeResult && typeof resumeResult.catch === 'function') resumeResult.catch(function () {});
+    }
+  }
+
   function syncVirtualLandscape() {
     const root = document.documentElement;
     root.style.setProperty('--virtual-landscape-width', `${window.innerHeight}px`);
@@ -111,8 +126,7 @@
     const encoded = table && table[key];
     if (!encoded) return false;
 
-    if (!audioContext) audioContext = new AudioContextClass();
-    if (audioContext.state === 'suspended') await audioContext.resume();
+    unlockAudio();
 
     let buffer = decodedAudio.get(key);
     if (!buffer) {
@@ -468,6 +482,7 @@
   if (bellImage.complete) syncBellHits();
 
   stage.addEventListener('pointerdown', function (event) {
+    unlockAudio();
     preferLandscape();
     const button = event.target.closest('[data-hit]');
     if (!button) return;
@@ -476,6 +491,7 @@
   });
 
   piano.addEventListener('pointerdown', function (event) {
+    unlockAudio();
     preferLandscape();
     const key = event.target.closest('[data-midi]');
     if (!key) return;
@@ -484,6 +500,7 @@
   });
 
   instrumentToggle.addEventListener('click', function (event) {
+    unlockAudio();
     preferLandscape();
     const button = event.target.closest('[data-instrument]');
     if (!button) return;
